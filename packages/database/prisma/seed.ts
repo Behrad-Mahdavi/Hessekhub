@@ -612,8 +612,18 @@ async function main() {
       },
     },
     {
-      blockType: "CAFE_SHOWCASE",
+      blockType: "BMR_TEASER",
       orderIndex: 4,
+      contentJson: {
+        headlineFa: "کالری پایه و پکیج هدف خود را زنده آزمایش کنید",
+        subheadlineFa: "تنها با تنظیم سن، قد و وزن خود، متابولیسم پایه (BMR) و سطح کالری مناسب برای لاغری پایدار را بدون حدس و گمان مشاهده کنید.",
+        ctaTitleFa: "ورود به آنالیز کامل بیومتریک",
+        ctaUrl: "/tools/calorie-calculator",
+      },
+    },
+    {
+      blockType: "CAFE_SHOWCASE",
+      orderIndex: 5,
       contentJson: {
         titleFa: "کافه‌بوتیک سلامتی حس خوب (سجاد)",
         descriptionFa: "فضایی آرام و مینیمال برای نوشیدن قهوه تخصصی، صبحانه‌های پروتئینی و سالادهای تازه سلامت‌محور.",
@@ -626,7 +636,7 @@ async function main() {
     },
     {
       blockType: "FAQ_ACCORDION",
-      orderIndex: 5,
+      orderIndex: 6,
       contentJson: {
         sectionTitleFa: "پرسش‌های متداول درباره پکیج‌های غذای رژیمی در مشهد",
       },

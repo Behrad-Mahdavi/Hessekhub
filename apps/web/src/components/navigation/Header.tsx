@@ -19,80 +19,91 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-sticky w-full bg-surface/90 backdrop-blur-md border-b border-border-subtle shadow-elevation-1 transition-all">
-      <div className="max-w-container mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo & Location Tag */}
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-3 select-none transition-transform duration-fast hover:scale-[1.02] active:scale-[0.98]"
-            aria-label="صفحه اصلی حس خوب"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={BRAND_LOGOS.ink.path}
-              alt={BRAND_LOGOS.ink.alt}
-              className="h-10 w-auto object-contain"
-            />
-          </Link>
+    <>
+      {/* Luxury Minimalist Editorial Ticker */}
+      <div className="w-full bg-calm/70 border-b border-border-subtle/80 py-1.5 px-4 text-center text-[11px] font-medium text-muted flex items-center justify-center gap-3">
+        <span className="flex items-center gap-1.5 text-primary font-bold">
+          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+          کافه‌بوتیک سجاد باز است (۸:۰۰ تا ۲۴:۰۰)
+        </span>
+        <span className="hidden sm:inline text-border-default">•</span>
+        <span className="hidden sm:inline">تحویل اختصاصی روزانه در تمام مناطق مشهد با نظارت کارشناس تغذیه</span>
+      </div>
 
-          {/* Sajjad Mashhad Location Pill (Desktop) */}
-          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-calm text-primary text-xs font-medium rounded-pill border border-border-subtle">
-            <span className="w-2 h-2 rounded-full bg-success animate-pulse" aria-hidden="true" />
-            <span>مشهد، بلوار سجاد</span>
-          </div>
-        </div>
-
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {NAV_LINKS.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`relative py-2 transition-colors duration-fast ${
-                  isActive
-                    ? "text-primary font-bold"
-                    : "text-strong hover:text-primary"
-                }`}
-              >
-                <span>{item.label}</span>
-                {isActive && (
-                  <span
-                    className="absolute bottom-0 inset-x-0 h-0.5 bg-primary rounded-pill transition-all"
-                    aria-hidden="true"
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-3">
-          <a
-            href="tel:05137660000"
-            className="hidden xl:inline-flex items-center gap-2 text-xs font-bold text-muted hover:text-primary px-3 py-2 rounded-md hover:bg-surface-hover transition-colors"
-            dir="ltr"
-          >
-            <span>۰۵۱-۳۷۶۶۰۰۰۰</span>
-            <svg className="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+      <header className="sticky top-0 z-sticky w-full bg-surface/85 backdrop-blur-xl border-b border-border-default/70 shadow-[0_8px_30px_rgba(16,15,13,0.04)] transition-all">
+        <div className="max-w-container mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
+          {/* Brand Logo & Location Tag */}
+          <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-3 select-none transition-transform duration-fast hover:scale-[1.02] active:scale-[0.98]"
+              aria-label="صفحه اصلی حس خوب"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={BRAND_LOGOS.ink.path}
+                alt={BRAND_LOGOS.ink.alt}
+                className="h-10 w-auto object-contain"
               />
-            </svg>
-          </a>
+            </Link>
 
-          <Link href="/tools/calorie-calculator">
-            <Button variant="primary" size="sm">
-              محاسبه کالری و ثبت‌نام
-            </Button>
-          </Link>
-        </div>
+            {/* Sajjad Mashhad Location Pill (Desktop) */}
+            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-calm text-primary text-xs font-semibold rounded-pill border border-border-subtle shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-primary/70" aria-hidden="true" />
+              <span>مشهد، بلوار سجاد · از ۱۳۹۷</span>
+            </div>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            {NAV_LINKS.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative py-2 transition-all duration-fast ${
+                    isActive
+                      ? "text-primary font-bold"
+                      : "text-strong hover:text-primary"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <span
+                      className="absolute bottom-0 inset-x-0 h-0.5 bg-primary rounded-pill transition-all"
+                      aria-hidden="true"
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              href="tel:05137660000"
+              className="hidden xl:inline-flex items-center gap-2 text-xs font-bold text-muted hover:text-primary px-3 py-2 rounded-md hover:bg-surface-hover transition-colors"
+              dir="ltr"
+            >
+              <span>۰۵۱-۳۷۶۶۰۰۰۰</span>
+              <svg className="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+            </a>
+
+            <Link href="/tools/calorie-calculator">
+              <Button variant="primary" size="md" className="shadow-elevation-1 hover:shadow-elevation-2 transition-all">
+                محاسبه کالری و ثبت‌نام
+              </Button>
+            </Link>
+          </div>
 
         {/* Mobile Hamburger Toggle & Quick CTA */}
         <div className="flex md:hidden items-center gap-2">
@@ -160,6 +171,7 @@ export function Header() {
         </div>
       )}
     </header>
+  </>
   );
 }
 
