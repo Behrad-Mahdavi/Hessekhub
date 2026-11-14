@@ -1,0 +1,294 @@
+/* ==========================================================================
+   1. FONTS (@font-face)
+   ========================================================================== */
+@font-face {
+  font-family: "IRANSansFaNum";
+  src: url("/fonts/IRANSansXFaNum-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IRANSansFaNum";
+  src: url("/fonts/IRANSansXFaNum-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IRANSansFaNum";
+  src: url("/fonts/IRANSansXFaNum-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IRANSansFaNum";
+  src: url("/fonts/IRANSansXFaNum-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: optional;
+}
+
+/* ==========================================================================
+   2. PRIMITIVE TOKENS (OKLab Scales & Base Dimensions)
+   ========================================================================== */
+:root {
+  /* Primitives: Blue */
+  --hk-blue-50: #F3F7FF;  --hk-blue-100: #D0DFF9; --hk-blue-200: #B2C6EB;
+  --hk-blue-300: #95AEDD; --hk-blue-400: #7896CF; --hk-blue-500: #5C7FC1;
+  --hk-blue-600: #4167B2; --hk-blue-700: #264FA3; --hk-blue-800: #1A3978;
+  --hk-blue-900: #0E2350;
+
+  /* Primitives: Ice */
+  --hk-ice-50: #E7FBFE;   --hk-ice-100: #CDEDF1;  --hk-ice-200: #B3DEE4;
+  --hk-ice-300: #9AC2C7;  --hk-ice-400: #82A6AB;  --hk-ice-500: #6A8B90;
+  --hk-ice-600: #537175;  --hk-ice-700: #3E585C;  --hk-ice-800: #294144;
+  --hk-ice-900: #152A2D;
+
+  /* Primitives: Plum */
+  --hk-plum-50: #FFF3FA;  --hk-plum-100: #F5D4E8; --hk-plum-200: #E8B8D6;
+  --hk-plum-300: #DA9CC3; --hk-plum-400: #CB80B1; --hk-plum-500: #BC639F;
+  --hk-plum-600: #AC458D; --hk-plum-700: #9B227B; --hk-plum-800: #6F1357;
+  --hk-plum-900: #460535;
+
+  /* Primitives: Green */
+  --hk-green-50: #ECFBF0;  --hk-green-100: #D0E9D6; --hk-green-200: #B4D6BC;
+  --hk-green-300: #99C4A3; --hk-green-400: #7DB28B; --hk-green-500: #61A073;
+  --hk-green-600: #438E5B; --hk-green-700: #2D6D42; --hk-green-800: #194D2B;
+  --hk-green-900: #052F16;
+
+  /* Primitives: Lime */
+  --hk-lime-50: #F3FAEA;  --hk-lime-100: #D6EEAD; --hk-lime-200: #B9E169;
+  --hk-lime-300: #A0C555; --hk-lime-400: #88A941; --hk-lime-500: #708E2E;
+  --hk-lime-600: #5A7419; --hk-lime-700: #445B00; --hk-lime-800: #314300;
+  --hk-lime-900: #1F2C00;
+
+  /* Primitives: Yellow */
+  --hk-yellow-50: #FAF8E7;  --hk-yellow-100: #F6EA9D; --hk-yellow-200: #F3DA31;
+  --hk-yellow-300: #D5BD13; --hk-yellow-400: #B6A20C; --hk-yellow-500: #988702;
+  --hk-yellow-600: #7C6D00; --hk-yellow-700: #605401; --hk-yellow-800: #463D00;
+  --hk-yellow-900: #2D2700;
+
+  /* Primitives: Tan */
+  --hk-tan-50: #FFF5EA;   --hk-tan-100: #F4E0CB;  --hk-tan-200: #E6CCAF;
+  --hk-tan-300: #D9B894;  --hk-tan-400: #CBA578;  --hk-tan-500: #BE915C;
+  --hk-tan-600: #9A7345;  --hk-tan-700: #77562E;  --hk-tan-800: #563B19;
+  --hk-tan-900: #372104;
+
+  /* Primitives: Orange */
+  --hk-orange-50: #FFF4F0;  --hk-orange-100: #FFD8C9; --hk-orange-200: #FBBDA5;
+  --hk-orange-300: #F4A281; --hk-orange-400: #EC865D; --hk-orange-500: #E26934;
+  --hk-orange-600: #BA5121; --hk-orange-700: #93390C; --hk-orange-800: #6D2400;
+  --hk-orange-900: #461400;
+
+  /* Primitives: Coral */
+  --hk-coral-50: #FFF4F3;  --hk-coral-100: #FFD3D1; --hk-coral-200: #FEB1AE;
+  --hk-coral-300: #F68F8E; --hk-coral-400: #ED6C6E; --hk-coral-500: #E2444F;
+  --hk-coral-600: #BC313C; --hk-coral-700: #971E2B; --hk-coral-800: #73091A;
+  --hk-coral-900: #4F000C;
+
+  /* Primitives: Vermilion */
+  --hk-vermilion-50: #FFF4F2;  --hk-vermilion-100: #FFD7CF; --hk-vermilion-200: #FDBAAD;
+  --hk-vermilion-300: #F69D8D; --hk-vermilion-400: #EE806D; --hk-vermilion-500: #E4614C;
+  --hk-vermilion-600: #D93C27; --hk-vermilion-700: #AA2514; --hk-vermilion-800: #7C0E02;
+  --hk-vermilion-900: #4F0200;
+
+  /* Primitives: Warm Neutral */
+  --hk-neutral-50: #FBFAF7;  --hk-neutral-100: #F5F3EF; --hk-neutral-200: #EAE7E2;
+  --hk-neutral-300: #D7D4CD; --hk-neutral-400: #BBB7B0; --hk-neutral-500: #8F8C85;
+  --hk-neutral-600: #6B6963; --hk-neutral-700: #4A4742; --hk-neutral-800: #2D2B27;
+  --hk-neutral-900: #1B1916;
+
+  --hk-ink: #100F0D;
+  --hk-white: #FFFFFF;
+
+  /* Typography Stack & Mobile-First Scale (<744px) */
+  --hk-font-sans: "IRANSansFaNum", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --hk-type-display-xl: 700 36px/50px var(--hk-font-sans);
+  --hk-type-display:    700 30px/44px var(--hk-font-sans);
+  --hk-type-h1:         700 26px/40px var(--hk-font-sans);
+  --hk-type-h2:         700 22px/34px var(--hk-font-sans);
+  --hk-type-h3:         700 20px/32px var(--hk-font-sans);
+  --hk-type-title:      500 18px/30px var(--hk-font-sans);
+  --hk-type-body-lg:    400 18px/32px var(--hk-font-sans);
+  --hk-type-body:       400 16px/28px var(--hk-font-sans);
+  --hk-type-body-sm:    400 14px/24px var(--hk-font-sans);
+  --hk-type-label:      500 14px/20px var(--hk-font-sans);
+  --hk-type-caption:    400 13px/22px var(--hk-font-sans);
+  --hk-type-num-xl:     900 40px/48px var(--hk-font-sans);
+  --hk-type-num-lg:     700 28px/36px var(--hk-font-sans);
+
+  /* Spacing & Layout */
+  --hk-space-0: 0px;   --hk-space-1: 2px;   --hk-space-2: 4px;   --hk-space-3: 8px;
+  --hk-space-4: 12px;  --hk-space-5: 16px;  --hk-space-6: 20px;  --hk-space-7: 24px;
+  --hk-space-8: 32px;  --hk-space-9: 40px;  --hk-space-10: 48px; --hk-space-11: 64px;
+  --hk-space-12: 80px; --hk-space-13: 96px;
+  --hk-container-max: 1200px;
+  --hk-measure-body: 65ch;
+
+  /* Radius */
+  --hk-radius-xs: 4px;  --hk-radius-sm: 8px;  --hk-radius-md: 12px;
+  --hk-radius-lg: 20px; --hk-radius-xl: 28px; --hk-radius-pill: 999px;
+
+  /* Motion */
+  --hk-duration-instant: 80ms;
+  --hk-duration-fast: 140ms;
+  --hk-duration-base: 220ms;
+  --hk-duration-slow: 280ms;
+  --hk-duration-celebrate: 500ms;
+  --hk-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --hk-ease-flow:     cubic-bezier(0.22, 1, 0.36, 1);
+  --hk-ease-happy:    cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z-Index Scale */
+  --hk-z-sticky: 100; --hk-z-dropdown: 200; --hk-z-sheet: 300;
+  --hk-z-modal: 400;  --hk-z-toast: 500;    --hk-z-tooltip: 600;
+
+  /* Density: Comfortable (Default) */
+  --hk-control-h: 52px;
+  --hk-control-h-sm: 44px;
+  --hk-hit-min: 48px;
+  --hk-table-row-h: 56px;
+}
+
+/* Responsive Type Scale Upgrade (Tablet & Desktop >= 744px) */
+@media (min-width: 744px) {
+  :root {
+    --hk-type-display-xl: 700 48px/64px var(--hk-font-sans);
+    --hk-type-display:    700 38px/54px var(--hk-font-sans);
+    --hk-type-h1:         700 30px/44px var(--hk-font-sans);
+    --hk-type-h2:         700 24px/36px var(--hk-font-sans);
+    --hk-type-num-xl:     900 48px/56px var(--hk-font-sans);
+    --hk-type-num-lg:     700 32px/40px var(--hk-font-sans);
+  }
+}
+
+/* Density: Compact (Panels) — Visual height compact, Hit target 44px */
+[data-density="compact"] {
+  --hk-control-h: 40px;
+  --hk-control-h-sm: 32px;
+  --hk-hit-min: 44px;
+  --hk-table-row-h: 44px;
+}
+
+/* ==========================================================================
+   3. SEMANTIC TOKENS (Pure Light Mode Only)
+   ========================================================================== */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --hk-bg-canvas: var(--hk-neutral-50);
+  --hk-bg-surface: var(--hk-white);
+  --hk-bg-surface-hover: var(--hk-neutral-100);
+  --hk-bg-surface-active: var(--hk-neutral-200);
+  --hk-bg-subtle: var(--hk-neutral-100);
+  --hk-bg-sunken: var(--hk-neutral-200);
+  --hk-bg-calm: var(--hk-ice-100);
+  --hk-bg-disabled: var(--hk-neutral-200);
+  --hk-bg-backdrop: rgba(16, 15, 13, 0.56);
+
+  --hk-border-subtle: var(--hk-neutral-200);
+  --hk-border-default: var(--hk-neutral-300);
+  --hk-border-control: var(--hk-neutral-500);
+  --hk-border-disabled: var(--hk-neutral-300);
+
+  --hk-text-strong: var(--hk-ink);
+  --hk-text-default: var(--hk-neutral-800);
+  --hk-text-muted: var(--hk-neutral-700);
+  --hk-text-subtle: var(--hk-neutral-600);
+  --hk-text-disabled: var(--hk-neutral-500);
+  --hk-text-inverse: var(--hk-white);
+
+  --hk-primary-fill: var(--hk-blue-700);
+  --hk-primary-fill-hover: var(--hk-blue-800);
+  --hk-primary-fill-active: var(--hk-blue-900);
+  --hk-primary-on: var(--hk-white);
+  --hk-primary-subtle: var(--hk-blue-50);
+  --hk-primary-subtle-hover: var(--hk-blue-100);
+  --hk-primary-text: var(--hk-blue-700);
+  --hk-focus-ring: var(--hk-blue-700);
+
+  --hk-success-fill: var(--hk-green-700);
+  --hk-success-text: var(--hk-green-700);
+  --hk-success-subtle: var(--hk-green-50);
+
+  --hk-warning-fill: var(--hk-yellow-200);
+  --hk-warning-text: var(--hk-yellow-800);
+  --hk-warning-subtle: var(--hk-yellow-100);
+
+  --hk-danger-fill: var(--hk-vermilion-700);
+  --hk-danger-fill-hover: var(--hk-vermilion-800);
+  --hk-danger-text: var(--hk-vermilion-700);
+  --hk-danger-subtle: var(--hk-vermilion-50);
+
+  --hk-info-text: var(--hk-blue-800);
+  --hk-info-subtle: var(--hk-ice-100);
+
+  --hk-accent-fill: var(--hk-orange-500);
+  --hk-accent-fill-hover: var(--hk-orange-600);
+  --hk-accent-on: var(--hk-ink);
+
+  --hk-luxe-fill: var(--hk-plum-700);
+  --hk-luxe-on: var(--hk-white);
+  --hk-luxe-subtle: var(--hk-plum-100);
+  --hk-luxe-text: var(--hk-plum-800);
+
+  --hk-notify-fill: var(--hk-coral-600);
+
+  /* Elevations (Light) */
+  --hk-elevation-1: 0 1px 2px rgba(16, 15, 13, 0.06);
+  --hk-elevation-2: 0 4px 12px rgba(16, 15, 13, 0.08);
+  --hk-elevation-3: 0 12px 32px rgba(16, 15, 13, 0.12);
+
+  /* Data Viz & Charts (Light) */
+  --hk-chart-1: var(--hk-blue-700);
+  --hk-chart-2: var(--hk-orange-500);
+  --hk-chart-3: var(--hk-green-600);
+  --hk-chart-4: var(--hk-plum-700);
+  --hk-chart-5: var(--hk-ice-500);
+  --hk-chart-ref: var(--hk-neutral-500);
+  --hk-chart-raw-point: var(--hk-neutral-400);
+  --hk-chart-secondary-line: var(--hk-plum-600);
+}
+
+/* ==========================================================================
+   4. BASE UTILITIES & REDUCED MOTION
+   ========================================================================== */
+html {
+  direction: rtl;
+  font: var(--hk-type-body);
+  color: var(--hk-text-default);
+  background-color: var(--hk-bg-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+.hk-leaf-card {
+  border-start-start-radius: var(--hk-space-0);
+  border-start-end-radius: var(--hk-radius-lg);
+  border-end-end-radius: var(--hk-space-0);
+  border-end-start-radius: var(--hk-radius-lg);
+}
+
+.hk-scrim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(16, 15, 13, 0.76) 0%,
+    rgba(16, 15, 13, 0.60) 38%,
+    rgba(16, 15, 13, 0) 72%
+  );
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *:not([data-loading-spinner]),
+  *:not([data-loading-spinner])::before,
+  *:not([data-loading-spinner])::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+    scroll-behavior: auto !important;
+  }
+}

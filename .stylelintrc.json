@@ -1,0 +1,19 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "ignoreFiles": ["packages/design-tokens/tokens.css"],
+  "rules": {
+    "color-no-hex": [
+      true,
+      {
+        "message": "نوشتن کد هگز خام در فایل‌های CSS ممنوع است. فقط از توکن‌های معنایی var(--hk-*) استفاده کنید."
+      }
+    ],
+    "property-disallowed-list": [
+      ["margin-left", "margin-right", "padding-left", "padding-right", "left", "right"],
+      {
+        "message": "به جای ویژگی‌های فیزیکی چپ/راست از ویژگی‌های منطقی (margin-inline-start, padding-inline-end, inset-inline-start) استفاده کنید."
+      }
+    ]
+  }
+}
+

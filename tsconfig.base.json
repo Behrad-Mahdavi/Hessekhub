@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@hessekhub/design-tokens": ["packages/design-tokens/index.ts"],
+      "@hessekhub/ui": ["packages/ui/src/index.ts"],
+      "@hessekhub/database": ["packages/database/src/index.ts"],
+      "@hessekhub/shared-types": ["packages/shared-types/src/index.ts"]
+    }
+  }
+}
+

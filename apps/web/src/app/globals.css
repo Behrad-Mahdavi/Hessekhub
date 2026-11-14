@@ -1,0 +1,42 @@
+@import "../../../../packages/design-tokens/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    direction: rtl;
+  }
+  * {
+    border-color: var(--hk-border-subtle);
+  }
+  body {
+    direction: rtl;
+    background-color: var(--hk-bg-canvas);
+    color: var(--hk-text-default);
+    font-family: var(--hk-font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom Light Mode Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--hk-bg-canvas);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--hk-neutral-300);
+    border-radius: 999px;
+    border: 2px solid var(--hk-bg-canvas);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--hk-neutral-400);
+  }
+}
+

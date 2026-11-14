@@ -1,0 +1,808 @@
+// packages/database/prisma/schema.prisma
+// Hessekhub (حس خوب) Core Platform Database Schema
+// Architecture: Modular Monolith (PostgreSQL + Prisma)
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserRole {
+  CUSTOMER
+  NUTRITIONIST
+  HEAD_NUTRITIONIST
+  KITCHEN_STAFF
+  OPS_MANAGER
+  COURIER
+  CAFE_STAFF
+  MARKETING_EDITOR
+  PRODUCT_MANAGER
+  SUPER_ADMIN
+}
+
+enum Gender {
+  FEMALE
+  MALE
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHTLY_ACTIVE
+  MODERATELY_ACTIVE
+  VERY_ACTIVE
+  ATHLETE
+}
+
+enum FitnessGoal {
+  WEIGHT_LOSS
+  MUSCLE_GAIN
+  MAINTENANCE
+  ATHLETIC_PERFORMANCE
+  MEDICAL_WELLNESS
+}
+
+enum CoverageTierType {
+  FULL_BOARD          // کامل روزانه (صبحانه، ناهار، شام، میانوعده)
+  EXECUTIVE_WORKDAY   // روز کاری (ناهار + ۲ میانوعده محل کار)
+  NO_DINNER           // بدون شام (صبحانه + ناهار + میانوعده + راهنمای بشقاب شام)
+  TRIAL_3_DAY         // پکیج تست ۳ روزه (Tripwire)
+  MAINTENANCE_LIGHT   // فاز نگهداری سبک
+}
+
+enum SubscriptionStatus {
+  DRAFT
+  PENDING_PAYMENT
+  PENDING_MEDICAL_REVIEW // ارجاع شده به کارشناس به دلیل شرایط پزشکی پرخطر (A-06)
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum PhaseType {
+  ONBOARDING_ADJUSTMENT // فاز تنظیم اولیه
+  ACTIVE_PROGRESS       // فاز کاهش / عضلهسازی فعال
+  STABILIZATION         // فاز تثبیت
+  MAINTENANCE           // فاز نگهداری (D1)
+}
+
+enum CalorieDecisionAction {
+  INCREASE
+  DECREASE
+  MAINTAIN
+  MEDICAL_HOLD
+}
+
+enum MealType {
+  BREAKFAST
+  MORNING_SNACK
+  LUNCH
+  EVENING_SNACK
+  DINNER
+  DRINK
+  SALAD
+  DESSERT
+}
+
+enum DishLifecycleStatus {
+  DRAFT
+  EXPERIMENTAL
+  ACTIVE
+  RETIRED
+}
+
+enum DeliveryMethod {
+  COURIER_DELIVERY
+  CAFE_PICKUP // ایستگاه تحویل حضوری کافه (بدون هزینه پیک)
+  DINE_IN_CAFE
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  IN_KITCHEN
+  READY_FOR_PICKUP
+  OUT_FOR_DELIVERY
+  DELIVERED
+  ISSUE_REPORTED
+  CANCELLED
+}
+
+enum LedgerEntryType {
+  PAYMENT_CREDIT
+  SUBSCRIPTION_CHARGE
+  CAFE_ORDER_CHARGE
+  FREEZE_DAY_REFUND
+  REFERRAL_REWARD
+  ADMIN_ADJUSTMENT
+  GATEWAY_REFUND
+}
+
+enum PagePublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ============================================================================
+// 1. MULTI-CITY, AUTH, RBAC & AUDIT (Module K)
+// ============================================================================
+
+model City {
+  id        String   @id @default(cuid())
+  slug      String   @unique // e.g., "mashhad"
+  nameFa    String   // "مشهد"
+  isActive  Boolean  @default(true)
+  branches  Branch[]
+  zones     DeliveryZone[]
+  createdAt DateTime @default(now())
+}
+
+model Branch {
+  id           String   @id @default(cuid())
+  cityId       String
+  city         City     @relation(fields: [cityId], references: [id])
+  code         String   @unique // e.g., "MHD-SAJJAD-01"
+  nameFa       String   // "شعبه مرکزی و کافهبوتیک سجاد"
+  addressFa    String
+  latitude     Float
+  longitude    Float
+  phone        String
+  openingHours String   // e.g., "08:00-24:00"
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model User {
+  id            String    @id @default(cuid())
+  mobile        String    @unique
+  fullName      String?
+  email         String?   @unique
+  role          UserRole  @default(CUSTOMER)
+  isActive      Boolean   @default(true)
+  twoFactorSecret String? // For internal panels (K-06)
+  customer      Customer?
+  sessions      Session[]
+  auditLogs     AuditLog[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String   @unique
+  deviceInfo String?
+  ipAddress  String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id])
+  action     String   // e.g., "READ_HEALTH_PROFILE", "UPDATE_CMS_PAGE", "APPROVE_CALORIE"
+  entityType String
+  entityId   String
+  diffJson   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// 2. CUSTOMER, HEALTH PROFILE & ADAPTIVE NUTRITION ENGINE (Modules A, B, C)
+// ============================================================================
+
+model Customer {
+  id                     String            @id @default(cuid())
+  userId                 String            @unique
+  user                   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignedNutritionistId String?
+  acquisitionSource      String?           // UTM, "CAFE_QR", "CLUB_REFERRAL", "SEO_ORGANIC"
+  referralCode           String            @unique
+  referredByCustomerId   String?
+  loyaltyPoints          Int               @default(0)
+  loyaltyTier            String            @default("MEMBER") // MEMBER, SILVER, GOLD_CLUB
+  addresses              CustomerAddress[]
+  healthProfiles         HealthProfile[]
+  consents               ConsentRecord[]
+  subscriptions          Subscription[]
+  checkIns               CheckIn[]
+  menuAssignments        MenuAssignment[]
+  mealRatings            MealRating[]
+  cafeOrders             CafeOrder[]
+  wallet                 Wallet?
+  tickets                SupportTicket[]
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+}
+
+model ConsentRecord {
+  id             String   @id @default(cuid())
+  customerId     String
+  customer       Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  policyVersion  String   // e.g., "v1.0-1405-08"
+  consentType    String   // "HEALTH_DATA_PROCESSING", "BEFORE_AFTER_PUBLICATION"
+  granted        Boolean
+  grantedAt      DateTime @default(now())
+}
+
+model CustomerAddress {
+  id           String   @id @default(cuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  zoneId       String
+  zone         DeliveryZone @relation(fields: [zoneId], references: [id])
+  title        String   // "منزل"، "محل کار / مطب"
+  fullAddress  String
+  postalCode   String?
+  latitude     Float?
+  longitude    Float?
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+model HealthProfile {
+  id                   String        @id @default(cuid())
+  customerId           String
+  customer             Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  version              Int           @default(1)
+  gender               Gender
+  birthYearShamsi      Int
+  heightCm             Float
+  startingWeightKg     Float
+  targetWeightKg       Float
+  startingWaistCm      Float?
+  activityLevel        ActivityLevel
+  goal                 FitnessGoal
+  allergies            String[]      // Hard medical/allergy exclusions
+  dislikedIngredients  String[]      // Soft taste preferences
+  medicalConditions    String[]      // e.g., ["DIABETES_T2", "HYPOTHYROIDISM", "PREGNANCY"]
+  isMedicalHighRisk    Boolean       @default(false) // Triggers B-05 nutritionist hold
+  calculatedBmr        Int
+  calculatedTdee       Int
+  createdAt            DateTime      @default(now())
+
+  @@index([customerId, version])
+}
+
+model CheckIn {
+  id                    String   @id @default(cuid())
+  customerId            String
+  customer              Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  subscriptionId        String?
+  weekNumber            Int
+  fastingWeightKg       Float
+  waistCircumferenceCm  Float?
+  // Physiological context signals for Multi-variable Adaptive Regulator (C-02)
+  hasMenstrualCycle     Boolean  @default(false)
+  hadLowSleep           Boolean  @default(false)
+  hadHighStress         Boolean  @default(false)
+  hadOffPlanMeals       Boolean  @default(false)
+  adherencePercent      Int      @default(100)
+  energyScore           Int?     // 1..5
+  hungerScore           Int?     // 1..5
+  encryptedBodyPhotoKey String?  // Separate encrypted S3 bucket key (K-03)
+  scientificFeedbackFa  String?  // Calm card explanation shown to customer (A-25)
+  flaggedForReview      Boolean  @default(false)
+  flagReason            String?
+  createdAt             DateTime @default(now())
+
+  @@index([customerId, createdAt])
+}
+
+// ============================================================================
+// 3. PROGRAMS, COVERAGE TIERS & SUBSCRIPTIONS (Modules A, H)
+// ============================================================================
+
+model ProgramTemplate {
+  id                  String             @id @default(cuid())
+  slug                String             @unique // e.g., "weight-loss", "executive-workday", "athlete"
+  titleFa             String
+  subtitleFa          String
+  goal                FitnessGoal
+  defaultDurationWeeks Int               @default(12)
+  glyphId             String             @default("target") // Maps to BRAND_GLYPHS
+  isFeatured          Boolean            @default(false)
+  isActive            Boolean            @default(true)
+  sortOrder           Int                @default(0)
+  phases              ProgramPhase[]
+  coverageTiers       MealCoverageTier[]
+  seoMetaId           String?            @unique
+  seoMeta             SeoGeoMeta?        @relation(fields: [seoMetaId], references: [id])
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+model ProgramPhase {
+  id                String          @id @default(cuid())
+  programTemplateId String
+  programTemplate   ProgramTemplate @relation(fields: [programTemplateId], references: [id], onDelete: Cascade)
+  phaseType         PhaseType
+  orderIndex        Int
+  titleFa           String          // e.g., "فاز ۱: تنظیم متابولیسم"
+  durationWeeks     Int
+  calorieDeltaRule  Int             // e.g., -400 kcal from TDEE
+  descriptionFa     String
+}
+
+model MealCoverageTier {
+  id                  String           @id @default(cuid())
+  programTemplateId   String
+  programTemplate     ProgramTemplate  @relation(fields: [programTemplateId], references: [id], onDelete: Cascade)
+  tierType            CoverageTierType
+  titleFa             String           // e.g., "پکیج روز کاری (ناهار + ۲ میانوعده)"
+  badgeFa             String?          // Anchoring label e.g., "محبوبترین انتخاب"
+  includedMealTypes   MealType[]       // e.g., [LUNCH, MORNING_SNACK, EVENING_SNACK]
+  calorieSharePercent Int              @default(100) // e.g., 60% covered by package, 40% Home Plate Guide
+  daysCount           Int              @default(24)  // 24 days/month or 3 days for Trial
+  basePriceToman      BigInt           // Dynamic price editable by Admin
+  dailyDisplayPrice   BigInt           // Pennies-a-day anchor price
+  isDecoyOption       Boolean          @default(false)
+  isActive            Boolean          @default(true)
+  subscriptions       Subscription[]
+}
+
+model Subscription {
+  id                  String             @id @default(cuid())
+  customerId          String
+  customer            Customer           @relation(fields: [customerId], references: [id])
+  coverageTierId      String
+  coverageTier        MealCoverageTier   @relation(fields: [coverageTierId], references: [id])
+  status              SubscriptionStatus @default(DRAFT)
+  currentPhase        PhaseType          @default(ONBOARDING_ADJUSTMENT)
+  startDate           DateTime
+  endDate             DateTime
+  deliveryMethod      DeliveryMethod     @default(COURIER_DELIVERY)
+  deliveryAddressId   String?
+  deliverySlotId      String?
+  frozenDates         DateTime[]         // Days frozen >= 48h prior (A-14)
+  maxFreezeDays       Int                @default(6)
+  caloriePlans        CaloriePlan[]
+  invoices            Invoice[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([customerId, status])
+}
+
+model CaloriePlan {
+  id               String                @id @default(cuid())
+  subscriptionId   String
+  subscription     Subscription          @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  effectiveFrom    DateTime
+  totalDailyKcal   Int                   // Discrete tier: 1200, 1500, 1800, 2200, 2500
+  packageKcal      Int                   // Portion delivered by Hessekhub
+  homePlateKcal    Int                   // Portion guided for home meal (if partial board)
+  proteinGrams     Int
+  carbsGrams       Int
+  fatGrams         Int
+  decisionAction   CalorieDecisionAction @default(MAINTAIN)
+  reasonFa         String                // Explainable AI/Nutritionist reason (C-08)
+  approvedByUserId String?               // Null if auto-approved with high confidence
+  createdAt        DateTime              @default(now())
+}
+
+// ============================================================================
+// 4. MODULAR ROTATIONAL MENU & KITCHEN OPERATIONS (Module D)
+// ============================================================================
+
+model Meal {
+  id               String              @id @default(cuid())
+  slug             String              @unique
+  titleFa          String
+  descriptionFa    String
+  mealType         MealType
+  status           DishLifecycleStatus @default(ACTIVE)
+  ingredientsFa    String[]
+  allergens        String[]            // e.g., ["PEANUTS", "GLUTEN", "DAIRY"]
+  dietTags         String[]            // e.g., ["HIGH_PROTEIN", "KETO_FRIENDLY", "VEGETARIAN"]
+  heatingGuideFa   String?             // Printed on thermal label (D-11)
+  mediaAssetId     String?
+  mediaAsset       MediaAsset?         @relation(fields: [mediaAssetId], references: [id])
+  variants         MealVariant[]
+  menuDaysOptionA  RotationalMenuDay[] @relation("OptionAMeal")
+  menuDaysOptionB  RotationalMenuDay[] @relation("OptionBMeal")
+  assignments      MenuAssignment[]
+  ratings          MealRating[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+}
+
+model MealVariant {
+  id              String @id @default(cuid())
+  mealId          String
+  meal            Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  calorieTierKcal Int    // 1200, 1500, 1800, 2200, 2500
+  servingKcal     Int    // Actual kcal of this single meal
+  proteinGrams    Float
+  carbsGrams      Float
+  fatGrams        Float
+  bomCostToman    BigInt // Bill of Materials unit cost for Unit Economics (J-04)
+
+  @@unique([mealId, calorieTierKcal])
+}
+
+// 14-Day Modular Rotational Menu with 2 Standard Options per MealType (D-04)
+model RotationalMenuDay {
+  id            String   @id @default(cuid())
+  cycleDayIndex Int      // 1 to 14
+  mealType      MealType
+  optionAMealId String
+  optionAMeal   Meal     @relation("OptionAMeal", fields: [optionAMealId], references: [id])
+  optionBMealId String
+  optionBMeal   Meal     @relation("OptionBMeal", fields: [optionBMealId], references: [id])
+  isActive      Boolean  @default(true)
+
+  @@unique([cycleDayIndex, mealType])
+}
+
+model MenuAssignment {
+  id              String      @id @default(cuid())
+  customerId      String
+  customer        Customer    @relation(fields: [customerId], references: [id])
+  subscriptionId  String
+  deliveryDate    DateTime
+  mealType        MealType
+  assignedMealId  String
+  assignedMeal    Meal        @relation(fields: [assignedMealId], references: [id])
+  calorieTierKcal Int
+  isSwappedByUser Boolean     @default(false) // Swapped between Option A & B >= 48h prior
+  isLocked        Boolean     @default(false) // Locked 48h before cooking (D-07)
+  qrFeedbackToken String      @unique @default(uuid()) // Printed on thermal label (D-11)
+  labelPrintedAt  DateTime?
+  rating          MealRating?
+  createdAt       DateTime    @default(now())
+
+  @@index([deliveryDate, mealType])
+  @@index([customerId, deliveryDate])
+}
+
+model MealRating {
+  id               String         @id @default(cuid())
+  menuAssignmentId String         @unique
+  menuAssignment   MenuAssignment @relation(fields: [menuAssignmentId], references: [id])
+  customerId       String
+  customer         Customer       @relation(fields: [customerId], references: [id])
+  mealId           String
+  meal             Meal           @relation(fields: [mealId], references: [id])
+  score            Int            // 1 to 5
+  reasonTag        String?        // "TASTE", "PORTION", "PACKAGING", "TEMPERATURE"
+  comment          String?
+  createdAt        DateTime       @default(now())
+}
+
+// ============================================================================
+// 5. MASHHAD LOGISTICS & HEALTH BOUTIQUE CAFE (Modules E, F)
+// ============================================================================
+
+model DeliveryZone {
+  id              String            @id @default(cuid())
+  cityId          String
+  city            City              @relation(fields: [cityId], references: [id])
+  nameFa          String            // e.g., "منطقه ۱: سجاد، ملکآباد، فرشته"
+  neighborhoods   String[]          // Used for Local SEO & address matching
+  deliveryFeeToman BigInt           @default(0)
+  isActive        Boolean           @default(true)
+  addresses       CustomerAddress[]
+}
+
+model DeliverySlot {
+  id            String          @id @default(cuid())
+  titleFa       String          // e.g., "تحویل صبحگاهی (۷:۰۰ تا ۹:۳۰)"
+  startTime     String          // "07:00"
+  endTime       String          // "09:30"
+  maxCapacity   Int             @default(100)
+  isWorkdaySlot Boolean         @default(false)
+  orders        DeliveryOrder[]
+}
+
+model DeliveryOrder {
+  id             String         @id @default(cuid())
+  customerId     String
+  subscriptionId String?
+  deliveryDate   DateTime
+  deliveryMethod DeliveryMethod
+  slotId         String?
+  slot           DeliverySlot?  @relation(fields: [slotId], references: [id])
+  addressText    String?
+  status         OrderStatus    @default(CONFIRMED)
+  courierName    String?
+  deliveredAt    DateTime?
+  issueNote      String?
+  createdAt      DateTime       @default(now())
+
+  @@index([deliveryDate, status])
+}
+
+model CafeMenuItem {
+  id            String          @id @default(cuid())
+  slug          String          @unique
+  categoryFa    String          // "صبحانه"، "ناهار و شام"، "سالاد"، "نوشیدنی بر پایه قهوه"
+  titleFa       String
+  descriptionFa String
+  priceToman    BigInt
+  caloriesKcal  Int
+  proteinGrams  Float
+  carbsGrams    Float
+  fatGrams      Float
+  allergens     String[]
+  isAvailable   Boolean         @default(true)
+  sortOrder     Int             @default(0)
+  mediaAssetId  String?
+  mediaAsset    MediaAsset?     @relation(fields: [mediaAssetId], references: [id])
+  orderItems    CafeOrderItem[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model CafeOrder {
+  id             String          @id @default(cuid())
+  customerId     String?
+  customer       Customer?       @relation(fields: [customerId], references: [id])
+  guestMobile    String?
+  deliveryMethod DeliveryMethod  @default(DINE_IN_CAFE)
+  tableNumber    String?
+  isFridayCheatDay Boolean       @default(false)
+  totalAmountToman BigInt
+  totalCalories  Int
+  status         OrderStatus     @default(PENDING_PAYMENT)
+  items          CafeOrderItem[]
+  createdAt      DateTime        @default(now())
+}
+
+model CafeOrderItem {
+  id             String       @id @default(cuid())
+  cafeOrderId    String
+  cafeOrder      CafeOrder    @relation(fields: [cafeOrderId], references: [id], onDelete: Cascade)
+  cafeMenuItemId String
+  cafeMenuItem   CafeMenuItem @relation(fields: [cafeMenuItemId], references: [id])
+  quantity       Int
+  unitPriceToman BigInt
+}
+
+// ============================================================================
+// 6. IMMUTABLE FINANCE LEDGER & PAYMENTS (Module J)
+// ============================================================================
+
+model Wallet {
+  id           String        @id @default(cuid())
+  customerId   String        @unique
+  customer     Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  balanceToman BigInt        @default(0)
+  entries      LedgerEntry[]
+  updatedAt    DateTime      @updatedAt
+}
+
+model LedgerEntry {
+  id          String          @id @default(cuid())
+  walletId    String?
+  wallet      Wallet?         @relation(fields: [walletId], references: [id])
+  invoiceId   String?
+  entryType   LedgerEntryType
+  amountToman BigInt          // Positive for credit, negative for debit (append-only)
+  description String
+  referenceId String?         // Gateway RefID or Subscription ID
+  createdAt   DateTime        @default(now())
+
+  @@index([walletId, createdAt])
+}
+
+model Invoice {
+  id               String               @id @default(cuid())
+  invoiceNumber    String               @unique
+  customerId       String
+  subscriptionId   String?
+  subscription     Subscription?        @relation(fields: [subscriptionId], references: [id])
+  subtotalToman    BigInt
+  discountToman    BigInt               @default(0)
+  walletUsedToman  BigInt               @default(0)
+  payableToman     BigInt
+  discountCodeUsed String?
+  isPaid           Boolean              @default(false)
+  paidAt           DateTime?
+  transactions     PaymentTransaction[]
+  createdAt        DateTime             @default(now())
+}
+
+model PaymentTransaction {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+  gateway     String   // "ZARINPAL", "SAMAN", "BEHPARDAKHT"
+  authority   String   @unique
+  refId       String?
+  amountToman BigInt
+  status      String   // "INITIATED", "VERIFIED", "FAILED"
+  rawCallback Json?
+  createdAt   DateTime @default(now())
+}
+
+model DiscountCode {
+  id              String    @id @default(cuid())
+  code            String    @unique
+  discountPercent Int?
+  discountAmount  BigInt?
+  partnerName     String?   // e.g., "باشگاه پیلاتس سجاد" (B2B2C attribution)
+  maxUses         Int?
+  usedCount       Int       @default(0)
+  expiresAt       DateTime?
+  isActive        Boolean   @default(true)
+}
+
+// ============================================================================
+// 7. 100% DYNAMIC ADMIN CMS & TRIPLE-ENGINE SEO / GEO / AEO (Module G)
+// ============================================================================
+
+model MediaAsset {
+  id           String         @id @default(cuid())
+  fileName     String
+  storageKey   String         @unique // S3/MinIO key
+  publicUrl    String
+  webpUrl      String?
+  avifUrl      String?
+  mimeType     String
+  width        Int?
+  height       Int?
+  altTextFa    String         // Mandatory accessibility & SEO alt text
+  captionFa    String?
+  tags         String[]
+  meals        Meal[]
+  cafeItems    CafeMenuItem[]
+  createdAt    DateTime       @default(now())
+}
+
+// Unified SEO, GEO (Generative AI / llms.txt) & AEO (Answer Capsule) Metadata
+model SeoGeoMeta {
+  id                    String               @id @default(cuid())
+  metaTitleFa           String
+  metaDescriptionFa     String
+  canonicalUrl          String?
+  noIndex               Boolean              @default(false)
+  ogImageUrl            String?
+  // AEO: 40-60 word direct answer capsule rendered near top of page for Featured Snippets & AI Overviews
+  directAnswerCapsuleFa String?
+  // GEO: High-density factual markdown ingested into /llms.txt & /llms-full.txt
+  llmFactSummaryMd      String?
+  customJsonLd          Json?
+  cmsPage               CmsPage?
+  programTemplate       ProgramTemplate?
+  programmaticLanding   ProgrammaticLanding?
+  updatedAt             DateTime             @updatedAt
+}
+
+model CmsPage {
+  id        String            @id @default(cuid())
+  slug      String            @unique // "/", "/about", "/cafe", "/menu-showcase"
+  titleFa   String
+  status    PagePublishStatus @default(PUBLISHED)
+  seoMetaId String?           @unique
+  seoMeta   SeoGeoMeta?       @relation(fields: [seoMetaId], references: [id])
+  sections  CmsSectionBlock[]
+  faqs      FaqItem[]
+  updatedAt DateTime          @updatedAt
+}
+
+// Dynamic Page Builder Blocks (Admin edits all texts, images, glyphs & CTAs here)
+model CmsSectionBlock {
+  id          String  @id @default(cuid())
+  pageId      String
+  page        CmsPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  blockType   String  // "HERO_LEAF", "VALUE_GRID", "PACKAGE_COMPARISON", "CAFE_SHOWCASE", "BMR_TEASER", "TESTIMONIALS", "RICH_TEXT"
+  orderIndex  Int
+  isVisible   Boolean @default(true)
+  // Validated JSON storing headings, body copy, MediaAsset IDs, BrandGlyphId, and CTA links
+  contentJson Json
+}
+
+model FaqItem {
+  id                String   @id @default(cuid())
+  pageId            String?
+  page              CmsPage? @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  programSlug       String?  // Optional binding to a specific program page
+  questionFa        String   // Natural conversational query for AEO
+  answerFa          String   // Concise factual answer mapped to FAQPage JSON-LD
+  orderIndex        Int      @default(0)
+  includeInLlmsTxt  Boolean  @default(true)
+}
+
+// Programmatic SEO Engine for Mashhad Long-Tail Queries (/mashhad/[intentSlug])
+model ProgrammaticLanding {
+  id                 String      @id @default(cuid())
+  intentSlug         String      @unique // e.g., "diet-food-delivery", "workday-lunch-sajjad", "keto-meal-plan"
+  targetKeywordFa    String      // "ارسال غذای رژیمی در مشهد"
+  neighborhoodFa     String?     // "سجاد"
+  heroHeadlineFa     String
+  heroSubheadlineFa  String
+  bodyMarkdownFa     String
+  featuredProgramIds String[]
+  seoMetaId          String?     @unique
+  seoMeta            SeoGeoMeta? @relation(fields: [seoMetaId], references: [id])
+  isPublished        Boolean     @default(true)
+  updatedAt          DateTime    @updatedAt
+}
+
+model RedirectRule {
+  id         String   @id @default(cuid())
+  sourcePath String   @unique // Legacy URL from old site
+  targetPath String   // New Next.js URL
+  statusCode Int      @default(301)
+  hitCount   Int      @default(0)
+  createdAt  DateTime @default(now())
+}
+
+model SiteSetting {
+  key         String   @id // e.g., "GLOBAL_BRAND_INFO", "LLMS_TXT_PREAMBLE", "CAFE_CONTACT"
+  valueJson   Json
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================================================
+// 8. PRODUCT COCKPIT & SUPPORT (Modules I, L)
+// ============================================================================
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+  eventName   String   // e.g., "onboarding_step_completed", "subscription_activated", "meal_swapped"
+  anonymousId String?
+  customerId  String?
+  sessionId   String?
+  properties  Json?
+  pagePath    String?
+  createdAt   DateTime @default(now())
+
+  @@index([eventName, createdAt])
+  @@index([customerId])
+}
+
+model Experiment {
+  id                String   @id @default(cuid())
+  key               String   @unique // Feature flag key
+  titleFa           String
+  hypothesisFa      String
+  primaryMetric     String
+  targetSampleSize  Int
+  currentSampleSize Int      @default(0)
+  status            String   @default("DRAFT") // DRAFT, RUNNING, SIGNIFICANT, REJECTED
+  resultSummaryFa   String?
+  createdAt         DateTime @default(now())
+}
+
+model ProductDecision {
+  id           String   @id @default(cuid())
+  titleFa      String
+  whatChanged  String
+  whyReason    String
+  evidenceData String
+  ownerName    String
+  reviewDate   DateTime?
+  createdAt    DateTime @default(now())
+}
+
+model SupportTicket {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  subject    String
+  category   String   // "NUTRITION", "DELIVERY_ISSUE", "SUBSCRIPTION", "CAFE"
+  status     String   @default("OPEN")
+  messages   Json     // Array of { senderRole, text, attachmentUrl, timestamp }
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+

@@ -1,0 +1,19 @@
+{
+  "name": "@hessekhub/design-tokens",
+  "version": "2.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./tokens.css": "./tokens.css",
+    "./tailwind.preset": "./tailwind.preset.js"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  }
+}
