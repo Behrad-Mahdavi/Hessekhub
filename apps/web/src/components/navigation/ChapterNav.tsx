@@ -67,3 +67,4 @@ export function ChapterNav({ items, ariaLabel = "دسته‌بندی‌ها" }: 
     </nav>
   );
 }
+
