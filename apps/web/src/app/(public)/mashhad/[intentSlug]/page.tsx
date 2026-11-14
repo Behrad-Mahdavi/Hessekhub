@@ -7,7 +7,7 @@ import {
   getDeliveryZones,
   getDeliverySlots,
 } from "@/lib/api";
-import { Card, Button, Badge } from "@hessekhub/ui";
+import { Button, Badge } from "@hessekhub/ui";
 import { DirectAnswerCapsule } from "@/components/seo/DirectAnswerCapsule";
 import { JsonLdGraph } from "@/components/seo/JsonLdGraph";
 
@@ -55,114 +55,133 @@ export default async function MashhadIntentPage({ params }: PageProps) {
     "ارسال روزانه غذای رژیمی و سالم در مشهد با نظارت کارشناس تغذیه";
   const subheadline =
     landing?.heroSubheadlineFa ||
-    "مجموعه حس خوب (فعال از ۱۳۹۷) تنها ارائه‌دهنده پکیج‌های تخصصی رژیم غذایی با منوی چرخشی ۱۴ روزه و ارسال به کلیه مناطق مشهد است.";
+    "مجموعه حس خوب (فعال از ۱۳۹۷) ارائه‌دهنده پکیج‌های تخصصی رژیم غذایی با منوی چرخشی ۱۴ روزه و ارسال به کلیه مناطق مشهد است.";
   const answerCapsule =
     landing?.seoMeta?.directAnswerCapsuleFa ||
-    "پکیج‌های غذای رژیمی حس خوب با نظارت کارشناس ارشد تغذیه در مشهد آماده‌سازی شده و همه‌روزه در دو نوبت صبح (۷:۰۰ تا ۹:۳۰) و ظهر (۱۱:۳۰ تا ۱۳:۰۰) به مناطق سجاد، احمدآباد، وکیل‌آباد، ملک‌آباد و سایر نقاط مشهد در ظروف بهداشتی قابل ماکروویو ارسال می‌گردد.";
+    "پکیج‌های غذای رژیمی حس خوب با نظارت کارشناس ارشد تغذیه در مشهد آماده‌سازی شده و همه‌روزه در دو نوبت صبح (۶:۳۰ تا ۸:۳۰) و ظهر (۱۱:۰۰ تا ۱۲:۳۰) به مناطق سجاد، احمدآباد، وکیل‌آباد، ملک‌آباد و سایر نقاط مشهد در ظروف بهداشتی قابل ماکروویو ارسال می‌گردد.";
 
   return (
     <>
       <JsonLdGraph />
 
-      <main className="w-full py-10 md:py-16">
+      <main className="w-full py-12 md:py-20 bg-canvas">
         <div className="max-w-container mx-auto px-4 md:px-8">
+          
           {/* Direct Answer Capsule (AEO Snippet for Local Mashhad Queries) */}
           <DirectAnswerCapsule
             question="نحوه سفارش و ارسال روزانه غذای رژیمی در مناطق مختلف مشهد چگونه است؟"
             answer={answerCapsule}
           />
 
-          {/* Hero */}
-          <div className="text-start max-w-3xl mb-12">
+          {/* Monumental Hero */}
+          <section className="text-center max-w-4xl mx-auto mb-16">
             <Badge variant="primary" size="md" className="mb-4">
-              پوشش کامل شهر مشهد مقدس
+              پوشش کامل مناطق شهری مشهد مقدس
             </Badge>
 
-            <h1 className="text-3xl md:text-5xl font-extrabold text-strong mb-4 leading-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-strong mb-6 leading-tight tracking-normal">
               {headline}
             </h1>
 
-            <p className="text-base md:text-lg text-muted leading-relaxed">
+            <p className="text-base sm:text-lg text-muted leading-relaxed max-w-2xl mx-auto mb-10">
               {subheadline}
             </p>
-          </div>
 
-          {/* Mashhad Delivery Zones Grid */}
-          <div className="mb-16">
-            <h2 className="text-xl md:text-2xl font-extrabold text-strong mb-2 text-start">
-              مناطق تحت پوشش ارسال در مشهد
-            </h2>
-            <p className="text-sm text-muted mb-6 text-start">
-              ارسال روزانه با پیک اختصاصی و حفظ زنجیره سلامت غذا:
-            </p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {zones.map((zone) => (
-                <Card
-                  key={zone.id}
-                  className="p-4 text-center bg-canvas border border-border-default"
-                >
-                  <span className="text-sm font-extrabold text-strong block mb-1">
-                    {zone.nameFa}
-                  </span>
-                  <span className="text-[11px] text-muted">
-                    ارسال منظم روزانه
-                  </span>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Delivery Slots */}
-          <div className="mb-16">
-            <h2 className="text-xl md:text-2xl font-extrabold text-strong mb-2 text-start">
-              بازه‌های زمانی تحویل در مشهد
-            </h2>
-            <p className="text-sm text-muted mb-6 text-start">
-              هماهنگ با ساعت کاری دفاتر و آغاز صبحگاه شهروندان:
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {slots.map((slot) => (
-                <Card key={slot.id} className="p-6 text-start">
-                  <div className="text-xs font-bold text-primary mb-2">
-                    {slot.titleFa}
-                  </div>
-                  <div className="text-xl font-extrabold text-strong mb-2">
-                    {slot.startTime} الی {slot.endTime}
-                  </div>
-                  <p className="text-xs text-muted">
-                    {slot.isWorkdaySlot
-                      ? "ویژه ناهار دفاتر اداری، مطب‌ها و شرکت‌ها"
-                      : "بازه صبحگاهی استاندارد تحویل درب منزل"}
-                  </p>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Start Programs CTA */}
-          <div className="p-8 md:p-12 rounded-3xl bg-calm border border-border-default text-start">
-            <h3 className="text-2xl font-extrabold text-strong mb-3">
-              شروع دریافت روزانه پکیج غذای رژیمی در مشهد
-            </h3>
-            <p className="text-sm text-muted leading-relaxed max-w-2xl mb-8">
-              کالری هدف خود را محاسبه کنید، برنامه مورد نظرتان را انتخاب کنید و از فردا بسته‌های تازه‌پز حس خوب را تحویل بگیرید.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <Link href="/tools/calorie-calculator">
-                <Button variant="primary" size="md">
-                  محاسبه آنلاین کالری و بیومتریک
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+              <Link href="/start">
+                <Button variant="primary" size="lg" className="rounded-pill px-8 text-sm font-bold shadow-xs">
+                  محاسبه کالری و شروع اشتراک
                 </Button>
               </Link>
               <Link href="/programs">
-                <Button variant="secondary" size="md">
-                  مشاهده همه برنامه‌ها و قیمت‌ها
+                <Button variant="secondary" size="lg" className="rounded-pill px-8 text-sm font-bold text-primary border-primary/30">
+                  مشاهده لاین‌آپ پکیج‌ها ←
+                </Button>
+              </Link>
+            </div>
+          </section>
+
+          {/* Mashhad Delivery Zones Grid (Apple Grid Style) */}
+          <section className="mb-16">
+            <div className="text-start mb-6">
+              <span className="text-xs font-bold text-accent uppercase block mb-1">
+                شبکه توزیع اختصاصی
+              </span>
+              <h2 className="text-2xl font-black text-strong tracking-normal">
+                محله‌های تحت پوشش ارسال روزانه در مشهد
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+              {zones.map((zone) => (
+                <div
+                  key={zone.id}
+                  className="p-5 rounded-2xl bg-surface border border-border-subtle text-center shadow-xs hover:border-primary/40 transition-colors"
+                >
+                  <span className="text-sm font-bold text-strong block mb-1">
+                    {zone.nameFa}
+                  </span>
+                  <span className="text-[11px] text-muted">
+                    ارسال اختصاصی بامداد
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Delivery Slots */}
+          <section className="mb-16">
+            <div className="text-start mb-6">
+              <span className="text-xs font-bold text-accent uppercase block mb-1">
+                زمان‌بندی منظم
+              </span>
+              <h2 className="text-2xl font-black text-strong tracking-normal">
+                پنجره‌های زمانی تحویل در مشهد
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {slots.map((slot) => (
+                <div key={slot.id} className="p-8 rounded-3xl bg-surface border border-border-subtle text-start shadow-xs">
+                  <div className="text-xs font-bold text-primary mb-2">
+                    {slot.titleFa}
+                  </div>
+                  <div className="text-2xl font-black text-strong mb-2">
+                    {slot.startTime} الی {slot.endTime}
+                  </div>
+                  <p className="text-xs text-muted leading-relaxed">
+                    {slot.isWorkdaySlot
+                      ? "ویژه ناهار گرم در دفاتر اداری، مطب‌ها و کلینیک‌های مشهد"
+                      : "بازه صبحگاهی استاندارد تحویل درب منزل در بسته‌بندی بهداشتی"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Guarantee CTA Box */}
+          <div className="p-8 sm:p-12 rounded-3xl bg-surface border border-border-subtle text-start max-w-3xl mx-auto shadow-xs">
+            <h3 className="text-2xl font-black text-strong mb-3">
+              پکیج تازه از فردا درب منزل یا محل کار شما
+            </h3>
+            <p className="text-xs sm:text-sm text-muted leading-relaxed mb-6">
+              تنها کافی است کالری هدف خود را انتخاب کنید تا برنامه غذایی‌تان در سیستم آشپزخانه حس خوب ثبت شده و از بامداد فردا ارسال آغاز شود.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <Link href="/tools/calorie-calculator">
+                <Button variant="primary" size="md" className="rounded-pill px-6 text-xs font-bold">
+                  محاسبه آنلاین بیومتریک و BMR
+                </Button>
+              </Link>
+              <Link href="/programs">
+                <Button variant="secondary" size="md" className="rounded-pill px-6 text-xs font-bold text-primary border-primary/30">
+                  مقایسه پکیج‌ها و تعرفه‌ها
                 </Button>
               </Link>
             </div>
           </div>
+
         </div>
       </main>
     </>

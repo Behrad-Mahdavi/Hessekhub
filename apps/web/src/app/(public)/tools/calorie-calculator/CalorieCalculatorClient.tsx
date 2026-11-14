@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Card, Button, Badge, NumberField, toPersianDigits } from "@hessekhub/ui";
+import { Button, toPersianDigits } from "@hessekhub/ui";
 
 type Gender = "MALE" | "FEMALE";
 type ActivityLevel =
@@ -65,10 +65,33 @@ export function CalorieCalculatorClient() {
       }
     }
 
-    // Macros
-    const proteinGrams = Math.round((discreteTier * 0.3) / 4);
-    const carbsGrams = Math.round((discreteTier * 0.45) / 4);
-    const fatGrams = Math.round((discreteTier * 0.25) / 9);
+    // Macro distributions
+    let proteinGrams = 0;
+    let fatGrams = 0;
+    let carbsGrams = 0;
+
+    if (goal === "WEIGHT_LOSS") {
+      proteinGrams = Math.round(weightKg * 2.0);
+      const proteinKcal = proteinGrams * 4;
+      const fatKcal = targetKcal * 0.28;
+      fatGrams = Math.round(fatKcal / 9);
+      const remainingKcal = Math.max(0, targetKcal - (proteinKcal + fatKcal));
+      carbsGrams = Math.round(remainingKcal / 4);
+    } else if (goal === "MUSCLE_GAIN") {
+      proteinGrams = Math.round(weightKg * 2.2);
+      const proteinKcal = proteinGrams * 4;
+      const fatKcal = targetKcal * 0.25;
+      fatGrams = Math.round(fatKcal / 9);
+      const remainingKcal = Math.max(0, targetKcal - (proteinKcal + fatKcal));
+      carbsGrams = Math.round(remainingKcal / 4);
+    } else {
+      proteinGrams = Math.round(weightKg * 1.6);
+      const proteinKcal = proteinGrams * 4;
+      const fatKcal = targetKcal * 0.3;
+      fatGrams = Math.round(fatKcal / 9);
+      const remainingKcal = Math.max(0, targetKcal - (proteinKcal + fatKcal));
+      carbsGrams = Math.round(remainingKcal / 4);
+    }
 
     return {
       bmr,
@@ -82,228 +105,215 @@ export function CalorieCalculatorClient() {
   }, [gender, age, weightKg, heightCm, activity, goal]);
 
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-start">
-        {/* Form Controls (Left / Col 7) */}
-        <div className="lg:col-span-7 space-y-6">
-          <Card className="p-6 md:p-8 border-border-default">
-            {/* Gender Toggle */}
-            <div className="mb-6">
-              <label className="text-xs font-bold text-muted block mb-2">جنسیت</label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setGender("FEMALE")}
-                  className={`py-3 rounded-2xl font-bold text-sm border transition-all ${
-                    gender === "FEMALE"
-                      ? "bg-primary text-white border-primary shadow-elevation-1"
-                      : "bg-canvas text-strong border-border-default hover:border-primary/40"
-                  }`}
-                >
-                  خانم
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setGender("MALE")}
-                  className={`py-3 rounded-2xl font-bold text-sm border transition-all ${
-                    gender === "MALE"
-                      ? "bg-primary text-white border-primary shadow-elevation-1"
-                      : "bg-canvas text-strong border-border-default hover:border-primary/40"
-                  }`}
-                >
-                  آقا
-                </button>
-              </div>
-            </div>
+    <div className="w-full max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Left Form: Inputs (Apple Settings Card Style) */}
+        <div className="lg:col-span-7 rounded-3xl bg-surface border border-border-subtle p-8 text-start shadow-xs">
+          <div className="mb-6">
+            <span className="text-xs font-bold text-accent uppercase block mb-1">
+              تنظیمات بیومتریک
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-strong">
+              اطلاعات بدنی خود را وارد کنید
+            </h2>
+          </div>
 
-            {/* Metrics Range Sliders with NumberFields */}
-            <div className="space-y-6 mb-6">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-muted">سن شما:</span>
-                  <div className="w-24">
-                    <NumberField
-                      value={age}
-                      onChange={(v) => typeof v === "number" && setAge(v)}
-                      unitLabel="سال"
-                      min={15}
-                      max={85}
-                    />
-                  </div>
-                </div>
-                <input
-                  type="range"
-                  min="15"
-                  max="85"
-                  value={age}
-                  onChange={(e) => setAge(Number(e.target.value))}
-                  className="w-full accent-primary h-2 bg-calm rounded-lg cursor-pointer"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-muted">وزن فعلی:</span>
-                  <div className="w-28">
-                    <NumberField
-                      value={weightKg}
-                      onChange={(v) => typeof v === "number" && setWeightKg(v)}
-                      unitLabel="kg"
-                      min={35}
-                      max={180}
-                    />
-                  </div>
-                </div>
-                <input
-                  type="range"
-                  min="35"
-                  max="180"
-                  value={weightKg}
-                  onChange={(e) => setWeightKg(Number(e.target.value))}
-                  className="w-full accent-primary h-2 bg-calm rounded-lg cursor-pointer"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-muted">قد:</span>
-                  <div className="w-28">
-                    <NumberField
-                      value={heightCm}
-                      onChange={(v) => typeof v === "number" && setHeightCm(v)}
-                      unitLabel="cm"
-                      min={120}
-                      max={225}
-                    />
-                  </div>
-                </div>
-                <input
-                  type="range"
-                  min="120"
-                  max="225"
-                  value={heightCm}
-                  onChange={(e) => setHeightCm(Number(e.target.value))}
-                  className="w-full accent-primary h-2 bg-calm rounded-lg cursor-pointer"
-                />
-              </div>
-            </div>
-
-            {/* Activity Level Selector */}
-            <div className="mb-6">
-              <label className="text-xs font-bold text-muted block mb-2">سطح فعالیت روزانه</label>
-              <select
-                value={activity}
-                onChange={(e) => setActivity(e.target.value as ActivityLevel)}
-                className="w-full p-3.5 rounded-2xl bg-canvas border border-border-default text-sm text-strong focus:outline-none focus:ring-2 focus:ring-primary/20"
+          {/* Gender Selector */}
+          <div className="mb-6">
+            <label className="text-xs font-bold text-muted block mb-2">جنسیت زیستی</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setGender("FEMALE")}
+                className={`h-12 rounded-pill text-xs font-bold transition-all ${
+                  gender === "FEMALE"
+                    ? "bg-primary text-white shadow-xs"
+                    : "bg-canvas text-strong border border-border-subtle hover:border-border-default"
+                }`}
               >
-                {Object.entries(ACTIVITY_MULTIPLIERS).map(([key, item]) => (
-                  <option key={key} value={key}>
-                    {item.labelFa}
-                  </option>
-                ))}
-              </select>
+                بانوان
+              </button>
+              <button
+                type="button"
+                onClick={() => setGender("MALE")}
+                className={`h-12 rounded-pill text-xs font-bold transition-all ${
+                  gender === "MALE"
+                    ? "bg-primary text-white shadow-xs"
+                    : "bg-canvas text-strong border border-border-subtle hover:border-border-default"
+                }`}
+              >
+                آقایان
+              </button>
             </div>
+          </div>
 
-            {/* Fitness Goal Selector */}
+          {/* Sliders: Age, Weight, Height */}
+          <div className="space-y-6 mb-6">
             <div>
-              <label className="text-xs font-bold text-muted block mb-2">هدف تناسب اندام شما</label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {Object.entries(GOAL_OPTIONS).map(([key, item]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setGoal(key as FitnessGoal)}
-                    className={`p-3 rounded-2xl text-xs font-bold border transition-all text-center ${
-                      goal === key
-                        ? "bg-primary text-white border-primary shadow-elevation-1"
-                        : "bg-canvas text-strong border-border-default hover:border-primary/40"
-                    }`}
-                  >
-                    {item.labelFa}
-                  </button>
-                ))}
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-muted">سن شما:</span>
+                <span className="text-sm font-black text-strong">{toPersianDigits(age)} سال</span>
               </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Results Card (Right / Col 5) */}
-        <div className="lg:col-span-5 space-y-6">
-          <Card className="p-6 md:p-8 border-primary/30 bg-gradient-to-b from-surface to-calm/60 shadow-elevation-2">
-            <Badge variant="primary" size="md" className="mb-4">
-              نتایج تحلیل بیومتریک شما
-            </Badge>
-
-            <div className="mb-6">
-              <span className="text-xs text-muted block mb-1">
-                کالری پایه متابولیسم استراحت (BMR):
-              </span>
-              <span className="text-lg font-bold text-strong">
-                {toPersianDigits(calculation.bmr)} کیلوکالری
-              </span>
+              <input
+                type="range"
+                min="15"
+                max="85"
+                value={age}
+                onChange={(e) => setAge(Number(e.target.value))}
+                className="w-full accent-primary h-2 bg-canvas rounded-lg cursor-pointer"
+              />
             </div>
 
-            <div className="mb-6">
-              <span className="text-xs text-muted block mb-1">
-                مجموع کالری مصرفی روزانه (TDEE):
-              </span>
-              <span className="text-lg font-bold text-strong">
-                {toPersianDigits(calculation.tdee)} کیلوکالری
-              </span>
-            </div>
-
-            {/* Target Calorie Highlight (Respect the body: Warm blue primary token, NOT red) */}
-            <div className="p-5 rounded-2xl bg-primary-subtle/40 border border-primary/30 mb-6">
-              <span className="text-xs font-bold text-primary block mb-1">
-                کالری هدف پکیج اختصاصی شما در حس خوب:
-              </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl md:text-4xl font-extrabold text-primary">
-                  {toPersianDigits(calculation.discreteTier)}
-                </span>
-                <span className="text-xs font-bold text-primary">
-                  کیلوکالری / روز (تیپ {toPersianDigits(calculation.discreteTier)})
-                </span>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-muted">وزن فعلی:</span>
+                <span className="text-sm font-black text-strong">{toPersianDigits(weightKg)} کیلوگرم</span>
               </div>
+              <input
+                type="range"
+                min="35"
+                max="180"
+                value={weightKg}
+                onChange={(e) => setWeightKg(Number(e.target.value))}
+                className="w-full accent-primary h-2 bg-canvas rounded-lg cursor-pointer"
+              />
             </div>
 
-            {/* Target Macros Breakdown */}
-            <div className="mb-8">
-              <span className="text-xs font-bold text-muted block mb-3">
-                توزیع متوازن درشت‌مغذی‌ها در پکیج روزانه:
-              </span>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="p-3 rounded-xl bg-canvas border border-border-default text-center">
-                  <span className="text-[11px] text-muted block mb-1">پروتئین خالص</span>
-                  <span className="text-base font-extrabold text-primary">
-                    {toPersianDigits(calculation.proteinGrams)}g
-                  </span>
-                </div>
-                <div className="p-3 rounded-xl bg-canvas border border-border-default text-center">
-                  <span className="text-[11px] text-muted block mb-1">کربوهیدرات پیچیده</span>
-                  <span className="text-base font-extrabold text-strong">
-                    {toPersianDigits(calculation.carbsGrams)}g
-                  </span>
-                </div>
-                <div className="p-3 rounded-xl bg-canvas border border-border-default text-center">
-                  <span className="text-[11px] text-muted block mb-1">چربی‌های مفید</span>
-                  <span className="text-base font-extrabold text-strong">
-                    {toPersianDigits(calculation.fatGrams)}g
-                  </span>
-                </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-muted">قد:</span>
+                <span className="text-sm font-black text-strong">{toPersianDigits(heightCm)} سانتی‌متر</span>
               </div>
+              <input
+                type="range"
+                min="120"
+                max="225"
+                value={heightCm}
+                onChange={(e) => setHeightCm(Number(e.target.value))}
+                className="w-full accent-primary h-2 bg-canvas rounded-lg cursor-pointer"
+              />
             </div>
+          </div>
 
-            <Link
-              href={`/start?goal=${goal}&gender=${gender}&age=${age}&weight=${weightKg}&height=${heightCm}&activity=${activity}&tier=${calculation.discreteTier}`}
-              className="w-full"
+          {/* Activity Level Selector */}
+          <div className="mb-6">
+            <label className="text-xs font-bold text-muted block mb-2">سطح فعالیت روزانه</label>
+            <select
+              value={activity}
+              onChange={(e) => setActivity(e.target.value as ActivityLevel)}
+              className="w-full p-3.5 rounded-2xl bg-canvas border border-border-subtle text-xs sm:text-sm text-strong focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
-              <Button variant="primary" size="lg" className="w-full">
-                شروع برنامه با این هدف کالری
-              </Button>
-            </Link>
-          </Card>
+              {Object.entries(ACTIVITY_MULTIPLIERS).map(([key, item]) => (
+                <option key={key} value={key}>
+                  {item.labelFa}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Fitness Goal Selector */}
+          <div>
+            <label className="text-xs font-bold text-muted block mb-2">هدف تناسب اندام شما</label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {Object.entries(GOAL_OPTIONS).map(([key, item]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setGoal(key as FitnessGoal)}
+                  className={`p-3 rounded-2xl text-xs font-bold border transition-all text-center ${
+                    goal === key
+                      ? "bg-primary text-white border-primary shadow-xs"
+                      : "bg-canvas text-strong border-border-subtle hover:border-border-default"
+                  }`}
+                >
+                  {item.labelFa}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
+
+        {/* Right Output: Apple Health Metrics Card */}
+        <div className="lg:col-span-5 rounded-3xl bg-surface border border-border-subtle p-8 text-start shadow-xs sticky top-28">
+          <div className="flex items-center justify-between pb-6 border-b border-border-subtle mb-6">
+            <div>
+              <span className="text-xs text-muted block">تیپ استاندارد آشپزخانه حس خوب:</span>
+              <h3 className="text-2xl font-black text-primary">
+                پکیج {toPersianDigits(calculation.discreteTier)} کیلوکالری
+              </h3>
+            </div>
+            <div className="w-12 h-12 rounded-full bg-calm text-primary flex items-center justify-center font-bold text-sm">
+              BMR
+            </div>
+          </div>
+
+          {/* Metric Rows (Apple Health Rings Style) */}
+          <div className="space-y-4 mb-8">
+            <div className="p-4 rounded-2xl bg-canvas border border-border-subtle flex items-center justify-between">
+              <div>
+                <span className="text-xs text-muted block">متابولیسم پایه (BMR):</span>
+                <span className="text-[11px] text-faint">انرژی در حالت استراحت مطلق</span>
+              </div>
+              <span className="text-lg font-black text-strong">
+                {toPersianDigits(calculation.bmr)} <span className="text-xs font-normal text-muted">kcal</span>
+              </span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-canvas border border-border-subtle flex items-center justify-between">
+              <div>
+                <span className="text-xs text-muted block">کل انرژی مصرفی (TDEE):</span>
+                <span className="text-[11px] text-faint">با احتساب ضریب تحرک</span>
+              </div>
+              <span className="text-lg font-black text-strong">
+                {toPersianDigits(calculation.tdee)} <span className="text-xs font-normal text-muted">kcal</span>
+              </span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-calm border border-border-subtle flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold text-primary block">کالری هدف روزانه:</span>
+                <span className="text-[11px] text-muted">ایمن و بهینه برای هدف شما</span>
+              </div>
+              <span className="text-2xl font-black text-primary">
+                {toPersianDigits(calculation.targetKcal)} <span className="text-xs font-normal text-muted">kcal</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Macro Breakdown */}
+          <div className="grid grid-cols-3 gap-2 text-center mb-8">
+            <div className="p-3 rounded-xl bg-canvas border border-border-subtle">
+              <span className="text-[10px] text-muted block mb-1">پروتئین خالص</span>
+              <span className="text-base font-black text-primary">
+                {toPersianDigits(calculation.proteinGrams)}g
+              </span>
+            </div>
+            <div className="p-3 rounded-xl bg-canvas border border-border-subtle">
+              <span className="text-[10px] text-muted block mb-1">کربوهیدرات</span>
+              <span className="text-base font-black text-strong">
+                {toPersianDigits(calculation.carbsGrams)}g
+              </span>
+            </div>
+            <div className="p-3 rounded-xl bg-canvas border border-border-subtle">
+              <span className="text-[10px] text-muted block mb-1">چربی سالم</span>
+              <span className="text-base font-black text-strong">
+                {toPersianDigits(calculation.fatGrams)}g
+              </span>
+            </div>
+          </div>
+
+          {/* Direct CTA to Onboarding Funnel with pre-selected tier */}
+          <Link
+            href={`/start?targetKcal=${calculation.discreteTier}&goal=${goal}&gender=${gender}`}
+            className="w-full block"
+          >
+            <Button variant="primary" size="lg" isFullWidth className="rounded-pill text-sm font-bold shadow-sm">
+              ثبت‌نام با این پکیج کالری ←
+            </Button>
+          </Link>
+        </div>
+
       </div>
     </div>
   );

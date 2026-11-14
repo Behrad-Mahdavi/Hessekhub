@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Card, Button, Badge, formatToman, toPersianDigits } from "@hessekhub/ui";
+import { Button, formatToman, toPersianDigits } from "@hessekhub/ui";
 
 export interface CafeMenuItemData {
   id: string;
@@ -61,17 +61,17 @@ export function CafeMenuClient({ initialItems }: CafeMenuClientProps) {
       try {
         localStorage.setItem("hessekhub_cafe_cart", JSON.stringify(updated));
       } catch {
-        // Ignore storage write error
+        // Ignore quota error
       }
       return updated;
     });
   };
 
-  const filteredItems = initialItems.filter(
-    (item) => selectedCategory === "همه" || item.categoryFa === selectedCategory
-  );
+  const filteredItems =
+    selectedCategory === "همه"
+      ? initialItems
+      : initialItems.filter((item) => item.categoryFa === selectedCategory);
 
-  // Cart metrics
   const totalItemsCount = Object.values(cart).reduce((a, b) => a + b, 0);
   const totalPriceToman = Object.entries(cart).reduce((sum, [id, qty]) => {
     const item = initialItems.find((i) => i.id === id);
@@ -79,19 +79,19 @@ export function CafeMenuClient({ initialItems }: CafeMenuClientProps) {
   }, 0);
 
   return (
-    <div className="w-full relative pb-28">
-      {/* Category Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+    <div className="w-full">
+      {/* Apple-Style Category Pills Strip */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-8 mb-4">
         <button
           type="button"
           onClick={() => setSelectedCategory("همه")}
-          className={`h-control-sm px-5 rounded-pill text-xs font-bold whitespace-nowrap transition-all duration-fast select-none ${
+          className={`h-11 px-5 rounded-pill text-xs font-bold whitespace-nowrap transition-all duration-fast select-none ${
             selectedCategory === "همه"
-              ? "bg-primary text-white shadow-elevation-1"
-              : "bg-surface text-muted border border-border-default hover:text-strong hover:border-border-control"
+              ? "bg-primary text-white shadow-xs"
+              : "bg-surface text-muted border border-border-subtle hover:text-strong hover:border-border-default"
           }`}
         >
-          همه بخش‌ها ({toPersianDigits(initialItems.length)})
+          همه آیتم‌ها ({toPersianDigits(initialItems.length)})
         </button>
 
         {categories.map((cat) => {
@@ -101,10 +101,10 @@ export function CafeMenuClient({ initialItems }: CafeMenuClientProps) {
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`h-control-sm px-5 rounded-pill text-xs font-bold whitespace-nowrap transition-all duration-fast select-none ${
+              className={`h-11 px-5 rounded-pill text-xs font-bold whitespace-nowrap transition-all duration-fast select-none ${
                 selectedCategory === cat
-                  ? "bg-primary text-white shadow-elevation-1"
-                  : "bg-surface text-muted border border-border-default hover:text-strong hover:border-border-control"
+                  ? "bg-primary text-white shadow-xs"
+                  : "bg-surface text-muted border border-border-subtle hover:text-strong hover:border-border-default"
               }`}
             >
               {cat} ({toPersianDigits(count)})
@@ -113,51 +113,51 @@ export function CafeMenuClient({ initialItems }: CafeMenuClientProps) {
         })}
       </div>
 
-      {/* Items Grid */}
+      {/* Items Grid (Apple Store Minimalist Cards) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredItems.map((item) => {
           const qty = cart[item.id] || 0;
 
           return (
-            <Card
+            <div
               key={item.id}
-              className="flex flex-col justify-between p-6 border-border-default text-start hover:border-primary/40 transition-all shadow-elevation-1"
+              className="rounded-3xl bg-surface border border-border-subtle hover:border-border-default p-6 flex flex-col justify-between text-start transition-all duration-medium group shadow-xs hover:shadow-md"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <Badge variant="calm" size="sm">
+                  <span className="text-[11px] font-bold text-primary bg-calm px-2.5 py-1 rounded-pill">
                     {item.categoryFa}
-                  </Badge>
-                  <span className="text-xs font-bold text-muted">
+                  </span>
+                  <span className="text-xs font-bold text-strong">
                     {toPersianDigits(item.calories)} کیلوکالری
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-strong mb-2">
+                <h3 className="text-lg font-bold text-strong mb-2 leading-snug">
                   {item.nameFa}
                 </h3>
 
-                <p className="text-xs text-muted leading-relaxed mb-4">
+                <p className="text-xs text-muted leading-relaxed mb-5">
                   {item.descriptionFa}
                 </p>
 
                 {/* Macro metrics */}
-                <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-canvas border border-border-default text-center mb-4 text-[11px]">
+                <div className="grid grid-cols-3 gap-2 p-2.5 rounded-2xl bg-canvas border border-border-subtle text-center mb-4 text-[11px]">
                   <div>
-                    <span className="text-muted block">پروتئین</span>
-                    <span className="font-extrabold text-primary">
+                    <span className="text-muted block text-[10px]">پروتئین</span>
+                    <span className="font-bold text-primary">
                       {toPersianDigits(item.proteinGrams)}g
                     </span>
                   </div>
                   <div>
-                    <span className="text-muted block">کربوهیدرات</span>
-                    <span className="font-extrabold text-strong">
+                    <span className="text-muted block text-[10px]">کربوهیدرات</span>
+                    <span className="font-bold text-strong">
                       {toPersianDigits(item.carbsGrams)}g
                     </span>
                   </div>
                   <div>
-                    <span className="text-muted block">چربی</span>
-                    <span className="font-extrabold text-strong">
+                    <span className="text-muted block text-[10px]">چربی مفید</span>
+                    <span className="font-bold text-strong">
                       {toPersianDigits(item.fatGrams)}g
                     </span>
                   </div>
@@ -179,65 +179,71 @@ export function CafeMenuClient({ initialItems }: CafeMenuClientProps) {
               </div>
 
               {/* Price and Add/Remove Button */}
-              <div className="pt-4 border-t border-border-default flex items-center justify-between">
-                <span className="text-sm font-extrabold text-strong">
-                  {formatToman(item.priceToman)}
-                </span>
+              <div className="pt-4 border-t border-border-subtle flex items-center justify-between">
+                <div>
+                  <span className="text-xs text-muted block mb-0.5">قیمت:</span>
+                  <span className="text-base font-black text-strong">
+                    {formatToman(item.priceToman)}
+                  </span>
+                </div>
 
                 {qty === 0 ? (
                   <Button
                     variant="primary"
                     size="sm"
                     onClick={() => updateQuantity(item.id, 1)}
+                    className="rounded-pill px-4 text-xs font-bold shadow-xs hover:scale-[1.02] active:scale-[0.98]"
                   >
                     افزودن به سفارش
                   </Button>
                 ) : (
-                  <div className="flex items-center gap-2 bg-calm p-1 rounded-xl border border-border-default">
+                  <div className="flex items-center gap-2 bg-canvas p-1 rounded-pill border border-border-subtle">
                     <button
                       type="button"
                       onClick={() => updateQuantity(item.id, -1)}
-                      className="w-7 h-7 rounded-lg bg-surface flex items-center justify-center font-bold text-strong hover:bg-canvas"
+                      className="w-7 h-7 rounded-full bg-surface flex items-center justify-center font-bold text-strong hover:bg-surface-hover shadow-xs"
+                      aria-label="کاهش تعداد"
                     >
                       -
                     </button>
-                    <span className="w-6 text-center text-xs font-extrabold text-strong">
+                    <span className="w-6 text-center text-xs font-bold text-strong">
                       {toPersianDigits(qty)}
                     </span>
                     <button
                       type="button"
                       onClick={() => updateQuantity(item.id, 1)}
-                      className="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-bold"
+                      className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-xs"
+                      aria-label="افزایش تعداد"
                     >
                       +
                     </button>
                   </div>
                 )}
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>
 
-      {/* Floating Bottom Cart Bar */}
+      {/* Apple-Style Floating Bag / Checkout Bar */}
       {totalItemsCount > 0 && (
-        <div className="fixed bottom-6 start-4 end-4 md:start-auto md:end-8 md:w-96 z-40 animate-in fade-in slide-in-from-bottom duration-300">
-          <Card className="p-4 bg-surface/95 backdrop-blur-md border-primary/40 shadow-elevation-3 flex items-center justify-between gap-4">
-            <div className="text-start">
+        <div className="fixed bottom-6 start-4 end-4 md:start-auto md:end-8 md:w-96 z-sticky animate-in fade-in slide-in-from-bottom duration-300">
+          <div className="p-4 rounded-3xl bg-surface/90 backdrop-blur-2xl border border-primary/30 shadow-[0_20px_50px_rgba(20,35,70,0.12)] flex items-center justify-between gap-4">
+            <div className="text-start ps-2">
               <span className="text-xs text-muted block">
-                {toPersianDigits(totalItemsCount)} آیتم انتخاب‌شده
+                {toPersianDigits(totalItemsCount)} آیتم در سبد خرید
               </span>
-              <span className="text-base font-extrabold text-strong">
+              <span className="text-base font-black text-strong">
                 {formatToman(totalPriceToman)}
               </span>
             </div>
 
             <Link href="/cafe/checkout">
-              <Button variant="primary" size="md">
-                تکمیل سفارش و پرداخت
+              <Button variant="primary" size="md" className="rounded-pill px-5 text-xs font-bold shadow-sm">
+                تکمیل سفارش و پرداخت ←
               </Button>
             </Link>
-          </Card>
+          </div>
         </div>
       )}
     </div>
