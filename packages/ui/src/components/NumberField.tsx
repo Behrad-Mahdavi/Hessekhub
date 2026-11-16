@@ -13,7 +13,7 @@ export interface NumberFieldProps extends Omit<TextFieldProps, "type" | "onChang
 }
 
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
-  ({ value, onChange, unitLabel, min, max, ...props }, ref) => {
+  ({ value, onChange, unitLabel, min, max, dir = "rtl", onBlur, ...props }, ref) => {
     const displayValue = value !== undefined && value !== "" ? toPersianDigits(value) : "";
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,10 +27,6 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
 
       const parsed = parseFloat(cleanEnglish);
       if (!isNaN(parsed)) {
-        if (min !== undefined && parsed < min) {
-          onChange?.(min);
-          return;
-        }
         if (max !== undefined && parsed > max) {
           onChange?.(max);
           return;
@@ -39,15 +35,29 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
       }
     };
 
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      onBlur?.(e);
+      if (typeof value === "number" && min !== undefined && value < min) {
+        onChange?.(min);
+      }
+    };
+
     return (
       <TextField
         ref={ref}
         type="text"
         inputMode="decimal"
-        dir="ltr"
+        dir={dir}
         value={displayValue}
         onChange={handleChange}
-        endAdornment={unitLabel ? <span className="text-sm font-medium text-muted ps-1">{unitLabel}</span> : undefined}
+        onBlur={handleBlur}
+        endAdornment={
+          unitLabel ? (
+            <span className="text-xs sm:text-sm font-medium text-muted select-none pointer-events-none">
+              {unitLabel}
+            </span>
+          ) : undefined
+        }
         {...props}
       />
     );

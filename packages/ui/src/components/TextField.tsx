@@ -23,6 +23,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       isFullWidth = true,
       disabled,
       id,
+      dir,
       ...props
     },
     ref
@@ -45,9 +46,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           </label>
         )}
 
-        <div className="relative flex items-center">
+        <div className="relative flex items-center" dir={dir}>
           {startAdornment && (
-            <span className="absolute inset-y-0 start-0 flex items-center ps-3 text-muted pointer-events-none">
+            <span className="absolute inset-y-0 start-0 flex items-center ps-3 text-muted pointer-events-none select-none z-10">
               {startAdornment}
             </span>
           )}
@@ -55,6 +56,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           <input
             ref={ref}
             id={inputId}
+            dir={dir}
             disabled={disabled}
             aria-invalid={isError}
             aria-describedby={isError ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
@@ -66,14 +68,14 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
                 : "border-border-default hover:border-border-control focus:border-primary focus:ring-2 focus:ring-primary/20",
               disabled && "bg-disabled text-faint border-border-disabled cursor-not-allowed",
               startAdornment ? "ps-10" : "ps-4",
-              endAdornment ? "pe-10" : "pe-4",
+              endAdornment ? "pe-12" : "pe-4",
               className
             )}
             {...props}
           />
 
           {endAdornment && (
-            <span className="absolute inset-y-0 end-0 flex items-center pe-3 text-muted">
+            <span className="absolute inset-y-0 end-0 flex items-center pe-3 text-muted pointer-events-none select-none z-10">
               {endAdornment}
             </span>
           )}
