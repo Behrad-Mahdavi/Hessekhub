@@ -2,7 +2,7 @@
 import React from "react";
 import { cn } from "../utils/cn";
 
-export type BadgeVariant = "primary" | "success" | "warning" | "danger" | "neutral" | "accent" | "luxe" | "calm";
+export type BadgeVariant = "primary" | "success" | "warning" | "danger" | "neutral" | "accent" | "luxe" | "calm" | "info";
 export type BadgeSize = "sm" | "md";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -28,6 +28,7 @@ export const Badge: React.FC<BadgeProps> = ({
     accent: "bg-accent text-ink border-transparent font-bold",
     luxe: "bg-luxe-subtle text-luxe-text border-luxe font-medium",
     calm: "bg-calm text-strong border-border-default font-medium",
+    info: "bg-primary-subtle text-primary border-primary",
   };
 
   const dotColors: Record<BadgeVariant, string> = {
@@ -39,6 +40,7 @@ export const Badge: React.FC<BadgeProps> = ({
     accent: "bg-ink",
     luxe: "bg-luxe",
     calm: "bg-primary",
+    info: "bg-primary",
   };
 
   const sizeStyles: Record<BadgeSize, string> = {
