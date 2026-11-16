@@ -22,25 +22,25 @@ Assets/
 
 | ردیف | نام فایل جدید | نام فایل اصلی | نام فارسی | عنوان انگلیسی | کد رنگ اختصاصی | دسته‌بندی موضوعی | مفهوم و کاربرد در محصول |
 | :---: | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **۰۱** | `glyph-01-plate.png` | `PNG-03.png` | بشقاب با حلقه داخلی | Dining Plate | Ice (`#AFD7E2` / `#B3DEE4`) | تغذیه | کنترل وعده غذایی، بشقاب سلامت |
-| **۰۲** | `glyph-02-apple-core.png` | `PNG-04.png` | ته سیب / تناسب اندام | Apple Core / Waist | Vermilion (`#D84C2D` / `#D93C27`) | تغذیه / اندام | میان‌وعده سالم، کمر باریک و تناسب |
-| **۰۳** | `glyph-03-leaf.png` | `PNG-05.png` | برگ ارگانیک | Fresh Leaf | Lime (`#BFDA81` / `#B9E169`) | تغذیه | تازگی، مواد اولیه ارگانیک و گیاهی |
-| **۰۴** | `glyph-04-dumbbell-curved.png` | `PNG-06.png` | دمبل خمیده | Curved Dumbbell | Vermilion (`#D84C2D` / `#D93C27`) | ورزش | تمرینات قدرتی، استقامت و فیتنس |
-| **۰۵** | `glyph-05-water-drop.png` | `PNG-07.png` | قطره آب | Water Droplet | Ice (`#AFD7E2` / `#B3DEE4`) | سلامت | هیدراتاسیون، مصرف بهینه آب |
-| **۰۶** | `glyph-06-bowl-cutout.png` | `PNG-08.png` | کاسه برش‌خورده | Cutout Dessert Bowl | Coral / Plum (`#E15D58`) | تغذیه | دسر ویژه، میان‌وعده‌های پروتئینی |
-| **۰۷** | `glyph-07-avocado.png` | `PNG-09.png` | قاچ آووکادو با هسته | Avocado Slice | Forest Green (`#468C61`) + Lime | تغذیه | چربی‌های مفید، سالاد و سوپرفود |
-| **۰۸** | `glyph-08-brand-hourglass.png` | `PNG-10.png` | ساعت‌شنی (نشان برند) | Brand Hourglass | Brand Blue (`#04539E` / `#264FA3`) | هویت برند | نماد مرکزی برند، مدیریت زمان و فاز رژیم |
-| **۰۹** | `glyph-09-quarter-circle-corner.png` | `PNG-11.png` | ربع‌دایره گوشه | Frame Quarter-Circle | Brand Blue (`#04539E` / `#264FA3`) | فرم‌های پایه | کادربندی کارت‌ها، امضای بصری گوشه برگ |
-| **۱۰** | `glyph-10-plum-squircle.png` | `PNG-12.png` | بالشتک اسکویرکل / آلو | Plum Squircle / Berry | Plum (`#9D3379` / `#9B227B`) | هویت برند | باشگاه مشتریان، حس لوکس و پریمیوم |
-| **۱۱** | `glyph-11-tennis-ball.png` | `PNG-13.png` | توپ تنیس | Tennis Ball | Lime (`#BFDA81` / `#B9E169`) | ورزش | فعالیت هوازی، تحرک و چابکی |
-| **۱۲** | `glyph-12-heart.png` | `PNG-14.png` | قلب سلامت | Vital Heart | Vermilion (`#D84C2D` / `#D93C27`) | سلامت | سلامت قلب و عروق، علاقه‌مندی‌ها |
-| **۱۳** | `glyph-13-target.png` | `PNG-15.png` | سیبل هدف متحدالمرکز | Bullseye Target | Vermilion (`#D84C2D` / `#D93C27`) | انگیزش | هدف‌گذاری، ردیابی وزن و اهداف کالری |
-| **۱۴** | `glyph-14-banana.png` | `PNG-16.png` | موز انرژی‌بخش | Energy Banana | Yellow (`#F7D94D` / `#F3DA31`) | تغذیه | میوه تازه، پتاسیم و انرژی قبل تمرین |
-| **۱۵** | `glyph-15-broccoli.png` | `PNG-17.png` | کلم بروکلی | Broccoli Crown | Forest Green (`#468C61` / `#438E5B`) | تغذیه | فیبر، سبزیجات تازه و ویتامین‌ها |
-| **۱۶** | `glyph-16-salad-bowl.png` | `PNG-18.png` | کاسه سالاد پایه‌دار | Salad Bowl | Orange (`#E27B42` / `#E26934`) | تغذیه | وعده‌های اصلی کاسه‌ای، غذای روزانه |
-| **۱۷** | `glyph-17-water-bottle.png` | `PNG-19.png` | بطری ورزشی / شیکر | Water Shaker Bottle | Ice (`#AFD7E2` / `#B3DEE4`) | ورزش / نوشیدنی | قمقمه آب، شیک پروتئین |
-| **۱۸** | `glyph-18-milestone-flag.png` | `PNG-20.png` | پرچم مایل‌استون | Milestone Flag | Orange (`#E27B42` / `#E26934`) | انگیزش | نقاط عطف مسیر، ثبت موفقیت هفتگی |
-| **۱۹** | `glyph-19-bicep-arm.png` | `PNG-21.png` | بازوی ورزشکار | Flexed Bicep | Tan (`#C1986C` / `#BE915C`) | ورزش | انضباط ورزشی، عضله‌سازی و قدرت |
+| **۰۱** | `glyph-01-plate-n.png` | `PNG-03.png` | بشقاب با حلقه داخلی | Dining Plate | Ice (`#AFD7E2` / `#B3DEE4`) | تغذیه | کنترل وعده غذایی، بشقاب سلامت |
+| **۰۲** | `glyph-02-apple-core-n.png` | `PNG-04.png` | ته سیب / تناسب اندام | Apple Core / Waist | Vermilion (`#D84C2D` / `#D93C27`) | تغذیه / اندام | میان‌وعده سالم، کمر باریک و تناسب |
+| **۰۳** | `glyph-03-leaf-n.png` | `PNG-05.png` | برگ ارگانیک | Fresh Leaf | Lime (`#BFDA81` / `#B9E169`) | تغذیه | تازگی، مواد اولیه ارگانیک و گیاهی |
+| **۰۴** | `glyph-04-dumbbell-curved-n.png` | `PNG-06.png` | دمبل خمیده | Curved Dumbbell | Vermilion (`#D84C2D` / `#D93C27`) | ورزش | تمرینات قدرتی، استقامت و فیتنس |
+| **۰۵** | `glyph-05-water-drop-n.png` | `PNG-07.png` | قطره آب | Water Droplet | Ice (`#AFD7E2` / `#B3DEE4`) | سلامت | هیدراتاسیون، مصرف بهینه آب |
+| **۰۶** | `glyph-06-bowl-cutout-n.png` | `PNG-08.png` | کاسه برش‌خورده | Cutout Dessert Bowl | Coral / Plum (`#E15D58`) | تغذیه | دسر ویژه، میان‌وعده‌های پروتئینی |
+| **۰۷** | `glyph-07-avocado-n.png` | `PNG-09.png` | قاچ آووکادو با هسته | Avocado Slice | Forest Green (`#468C61`) + Lime | تغذیه | چربی‌های مفید، سالاد و سوپرفود |
+| **۰۸** | `glyph-08-brand-hourglass-n.png` | `PNG-10.png` | ساعت‌شنی (نشان برند) | Brand Hourglass | Brand Blue (`#04539E` / `#264FA3`) | هویت برند | نماد مرکزی برند، مدیریت زمان و فاز رژیم |
+| **۰۹** | `glyph-09-quarter-circle-corner-n.png` | `PNG-11.png` | ربع‌دایره گوشه | Frame Quarter-Circle | Brand Blue (`#04539E` / `#264FA3`) | فرم‌های پایه | کادربندی کارت‌ها، امضای بصری گوشه برگ |
+| **۱۰** | `glyph-10-plum-squircle-n.png` | `PNG-12.png` | بالشتک اسکویرکل / آلو | Plum Squircle / Berry | Plum (`#9D3379` / `#9B227B`) | هویت برند | باشگاه مشتریان، حس لوکس و پریمیوم |
+| **۱۱** | `glyph-11-tennis-ball-n.png` | `PNG-13.png` | توپ تنیس | Tennis Ball | Lime (`#BFDA81` / `#B9E169`) | ورزش | فعالیت هوازی، تحرک و چابکی |
+| **۱۲** | `glyph-12-heart-n.png` | `PNG-14.png` | قلب سلامت | Vital Heart | Vermilion (`#D84C2D` / `#D93C27`) | سلامت | سلامت قلب و عروق، علاقه‌مندی‌ها |
+| **۱۳** | `glyph-13-target-n.png` | `PNG-15.png` | سیبل هدف متحدالمرکز | Bullseye Target | Vermilion (`#D84C2D` / `#D93C27`) | انگیزش | هدف‌گذاری، ردیابی وزن و اهداف کالری |
+| **۱۴** | `glyph-14-banana-n.png` | `PNG-16.png` | موز انرژی‌بخش | Energy Banana | Yellow (`#F7D94D` / `#F3DA31`) | تغذیه | میوه تازه، پتاسیم و انرژی قبل تمرین |
+| **۱۵** | `glyph-15-broccoli-n.png` | `PNG-17.png` | کلم بروکلی | Broccoli Crown | Forest Green (`#468C61` / `#438E5B`) | تغذیه | فیبر، سبزیجات تازه و ویتامین‌ها |
+| **۱۶** | `glyph-16-salad-bowl-n.png` | `PNG-18.png` | کاسه سالاد پایه‌دار | Salad Bowl | Orange (`#E27B42` / `#E26934`) | تغذیه | وعده‌های اصلی کاسه‌ای، غذای روزانه |
+| **۱۷** | `glyph-17-water-bottle-n.png` | `PNG-19.png` | بطری ورزشی / شیکر | Water Shaker Bottle | Ice (`#AFD7E2` / `#B3DEE4`) | ورزش / نوشیدنی | قمقمه آب، شیک پروتئین |
+| **۱۸** | `glyph-18-milestone-flag-n.png` | `PNG-20.png` | پرچم مایل‌استون | Milestone Flag | Orange (`#E27B42` / `#E26934`) | انگیزش | نقاط عطف مسیر، ثبت موفقیت هفتگی |
+| **۱۹** | `glyph-19-bicep-arm-n.png` | `PNG-21.png` | بازوی ورزشکار | Flexed Bicep | Tan (`#C1986C` / `#BE915C`) | ورزش | انضباط ورزشی، عضله‌سازی و قدرت |
 
 ---
 

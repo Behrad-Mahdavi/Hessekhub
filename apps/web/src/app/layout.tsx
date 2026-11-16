@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "ارسال روزانه پکیج‌های غذای رژیمی تازه در مشهد تحت نظارت کارشناس تغذیه (اشرف رهبری) و کافه‌بوتیک سلامتی سجاد مشهد. محاسبه دقیق کالری و فعال‌سازی آنی اشتراک.",
   icons: {
-    icon: "/assets/Brand-Glyphs/glyph-08-brand-hourglass.png",
+    icon: "/assets/Brand-Glyphs/glyph-08-brand-hourglass-n.png",
   },
   openGraph: {
     title: "حس خوب — پلتفرم سبک زندگی سالم و غذای رژیمی در مشهد",
