@@ -1,21 +1,15 @@
-// apps/web/src/components/blocks/PackageComparisonBlock.tsx
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Card, Button, Badge, formatToman } from "@hessekhub/ui";
+import { Button, Badge, formatToman } from "@hessekhub/ui";
 
 export interface ProgramTierInfo {
   id: string;
   tierType: string;
-  tierNameFa: string;
+  tierNameFa?: string;
   titleFa?: string;
-  daysPerWeek?: number;
-  daysCount?: number;
-  mealsIncluded?: string[];
-  includedMealTypes?: string[];
   basePriceToman: number | bigint;
-  dailyPriceToman?: number | bigint;
   dailyDisplayPrice?: number | bigint;
   badgeFa?: string;
 }
@@ -24,7 +18,7 @@ export interface ProgramInfo {
   id: string;
   slug: string;
   titleFa: string;
-  headlineFa: string;
+  headlineFa?: string;
   subtitleFa?: string;
   descriptionFa: string;
   coverageTiers: ProgramTierInfo[];
@@ -42,202 +36,148 @@ export function PackageComparisonBlock({
   content = {},
   programs = [],
 }: PackageComparisonBlockProps) {
-  // Store selected tier per program slug for interactive switching
-  const [selectedTiers, setSelectedTiers] = useState<Record<string, string>>({
-    "weight-loss": "FULL_BOARD",
-    "executive-workday": "EXECUTIVE_WORKDAY",
-    maintenance: "MAINTENANCE_LIGHT",
-  });
+  const [selectedTiers, setSelectedTiers] = useState<Record<string, string>>({});
 
-  const handleSelectTier = (programSlug: string, tierType: string) => {
-    setSelectedTiers((prev) => ({ ...prev, [programSlug]: tierType }));
-  };
+  if (!programs || programs.length === 0) return null;
 
   return (
-    <section id="packages" className="relative w-full py-16 md:py-28 bg-canvas">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/3 start-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-10 end-1/4 w-[400px] h-[400px] bg-luxe/5 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="max-w-container mx-auto px-4 md:px-8 relative z-10">
-        
-        {/* Apple Style Lineup Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <Badge variant="primary" size="md" className="mb-4">
-            پلن‌های رژیمی با فعال‌سازی آنی
+    <section id="packages" className="w-full py-16 md:py-24 bg-canvas">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <Badge variant="primary" className="mb-3">
+            برنامه‌های نتیجه‌محور حس خوب
           </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-strong mb-4 tracking-normal">
-            {content.sectionTitleFa || "کدام پکیج برای سبک زندگی شما ایده‌آل است؟"}
+          <h2 className="text-2xl sm:text-4xl font-black text-text-strong leading-tight mb-4">
+            {content.sectionTitleFa || "برنامه‌ای متناسب با ریتم زندگی خود انتخاب کنید."}
           </h2>
-          {content.sectionSubtitleFa ? (
-            <p className="text-base md:text-lg text-muted leading-relaxed max-w-[54ch] mx-auto">
-              {content.sectionSubtitleFa}
-            </p>
-          ) : (
-            <p className="text-base md:text-lg text-muted leading-relaxed max-w-[54ch] mx-auto">
-              تمام وعده‌ها با نظارت بالینی متخصص تغذیه، طبخ روزانه و ارسال در ظروف ارگانیک و حرارتی به تمام مشهد ارائه می‌شوند.
-            </p>
-          )}
+          <p className="text-base text-text-muted leading-relaxed">
+            {content.sectionSubtitleFa ||
+              "امکان انتخاب پوشش کامل روزانه یا پکیج روز کاری؛ همراه با قابلیت فریز روزهای مسافرت و نظارت هفتگی کارشناس تغذیه."}
+          </p>
         </div>
 
-        {/* 3-Column Luxury Program Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           {programs.map((prog) => {
             const isFeatured = prog.slug === "weight-loss";
             const tiers = prog.coverageTiers || [];
-            
-            const activeTierType = selectedTiers[prog.slug] || tiers[0]?.tierType || "FULL_BOARD";
-            const currentTier = tiers.find((t) => t.tierType === activeTierType) || tiers[0];
+            const activeTierType =
+              selectedTiers[prog.slug] || tiers[0]?.tierType || "FULL_BOARD";
+            const currentTier =
+              tiers.find((t) => t.tierType === activeTierType) || tiers[0];
 
             return (
-              <Card
+              <article
                 key={prog.id}
-                className={`relative flex flex-col justify-between p-8 md:p-9 rounded-[32px] transition-all duration-medium text-start ${
+                className={`relative rounded-xl bg-surface p-7 sm:p-8 flex flex-col justify-between text-start transition-all duration-base ${
                   isFeatured
-                    ? "bg-surface border-2 border-primary shadow-[0_25px_60px_-10px_rgba(38,79,163,0.14)] lg:-translate-y-3 ring-4 ring-primary/10"
-                    : "bg-surface border border-border-default/90 shadow-[0_10px_30px_rgba(16,15,13,0.04)] hover:border-border-control hover:shadow-md"
+                    ? "border-2 border-primary shadow-3 lg:-translate-y-2"
+                    : "border border-border-default shadow-1 hover:border-border-control"
                 }`}
               >
-                {/* Featured Badge */}
                 {isFeatured && (
-                  <div className="absolute -top-3.5 start-1/2 -translate-x-1/2 select-none">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1 bg-primary text-white text-xs font-bold rounded-pill shadow-xs">
-                      ★ محبوب‌ترین انتخاب در مشهد
+                  <div className="absolute -top-3.5 start-6">
+                    <span className="inline-flex items-center px-3.5 py-1 rounded-pill bg-primary text-primary-on text-xs font-bold shadow-1">
+                      محبوب‌ترین انتخاب
                     </span>
                   </div>
                 )}
 
                 <div>
-                  {/* Category Header */}
-                  <div className="flex items-center justify-between mb-4 mt-1">
-                    <span className="text-xs font-bold text-primary px-3 py-1 rounded-pill bg-primary-subtle border border-primary/20">
-                      {isFeatured
-                        ? "کاهش وزن و لاغری اصولی"
-                        : prog.slug === "executive-workday"
-                        ? "پکیج اختصاصی شاغلین"
-                        : "تثبیت و حفظ متابولیسم"}
-                    </span>
-                    <span className="text-xs font-medium text-muted">
-                      ارسال روزانه مشهد
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl font-black text-strong mb-2.5">
+                  <h3 className="text-xl sm:text-2xl font-black text-text-strong mb-2 mt-1">
                     {prog.titleFa}
                   </h3>
 
-                  <p className="text-sm text-muted mb-6 leading-relaxed min-h-[44px]">
-                    {prog.headlineFa || prog.subtitleFa || prog.descriptionFa}
+                  <p className="text-sm text-text-muted leading-relaxed mb-6">
+                    {prog.subtitleFa || prog.headlineFa || prog.descriptionFa}
                   </p>
 
-                  {/* Interactive Tier Switcher Tabs (Apple Segmented Style) */}
-                  {tiers.length > 1 && (
-                    <div className="mb-6">
-                      <div className="text-xs font-bold text-strong mb-2.5 flex items-center justify-between">
-                        <span>انتخاب سطح پوشش وعده‌ها:</span>
-                        <span className="text-[11px] text-primary font-bold">قابل سفارشی‌سازی</span>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        {tiers.map((tier) => {
-                          const isSelected = tier.tierType === activeTierType;
-                          return (
-                            <button
-                              key={tier.id}
-                              type="button"
-                              onClick={() => handleSelectTier(prog.slug, tier.tierType)}
-                              className={`p-3 rounded-2xl text-start text-xs flex items-center justify-between border transition-all duration-fast select-none ${
-                                isSelected
-                                  ? "bg-primary-subtle border-primary text-strong font-bold shadow-xs"
-                                  : "bg-canvas border-border-subtle text-muted hover:border-border-control"
-                              }`}
-                            >
-                              <div className="flex items-center gap-2.5">
-                                <span
-                                  className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                                    isSelected
-                                      ? "border-primary bg-primary text-white"
-                                      : "border-border-default bg-surface"
-                                  }`}
-                                >
-                                  {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
-                                </span>
-                                <span>{tier.titleFa || tier.tierNameFa}</span>
-                              </div>
-                              <span className="font-sans font-bold text-primary">
-                                {formatToman(tier.basePriceToman)}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
+                  {/* Tier Switcher */}
+                  {tiers.length > 0 && (
+                    <div className="space-y-2 mb-6">
+                      <span className="text-xs font-bold text-text-strong block">
+                        انتخاب پوشش وعده‌ها:
+                      </span>
+                      {tiers.map((tier) => {
+                        const isSelected = tier.tierType === activeTierType;
+                        return (
+                          <button
+                            key={tier.id}
+                            type="button"
+                            onClick={() =>
+                              setSelectedTiers((prev) => ({
+                                ...prev,
+                                [prog.slug]: tier.tierType,
+                              }))
+                            }
+                            className={`w-full p-3 rounded-md text-start text-xs flex items-center justify-between border transition-all duration-fast ${
+                              isSelected
+                                ? "bg-primary-subtle border-primary text-text-strong font-bold"
+                                : "bg-canvas border-border-subtle text-text-muted hover:border-border-control"
+                            }`}
+                          >
+                            <span>{tier.titleFa || tier.tierNameFa}</span>
+                            <span className="font-bold text-primary-text tabular-nums">
+                              {formatToman(tier.basePriceToman)}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
 
-                  {/* Program Features Checklist */}
-                  <div className="space-y-3 mb-8 pt-4 border-t border-border-subtle/80 text-xs text-muted">
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-4 h-4 rounded-full bg-success-subtle text-success flex items-center justify-center shrink-0 text-[11px] font-bold">
-                        ✓
-                      </span>
-                      <span>طبخ روزانه ۶:۰۰ صبح و تحویل درب منزل یا محل کار در مشهد</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-4 h-4 rounded-full bg-success-subtle text-success flex items-center justify-center shrink-0 text-[11px] font-bold">
-                        ✓
-                      </span>
-                      <span>منوی چرخشی ۱۴ روزه با ۲ گزینه انتخابی برای هر وعده</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-4 h-4 rounded-full bg-success-subtle text-success flex items-center justify-center shrink-0 text-[11px] font-bold">
-                        ✓
-                      </span>
-                      <span>پایش هفتگی بیومتریک و نظارت مستقیم متخصص تغذیه</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-4 h-4 rounded-full bg-success-subtle text-success flex items-center justify-center shrink-0 text-[11px] font-bold">
-                        ✓
-                      </span>
-                      <span>امکان فریز و توقف تا سقف ۶ روز در هر دوره ماهانه</span>
-                    </div>
-                  </div>
+                  {/* Core Guarantees */}
+                  <ul className="space-y-2.5 pt-4 border-t border-border-subtle text-xs text-text-muted mb-8">
+                    <li className="flex items-center gap-2">
+                      <span className="text-success-text font-bold" aria-hidden="true">✓</span>
+                      <span>منوی چرخشی ۱۴ روزه با امکان تغییر گزینه غذا</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-success-text font-bold" aria-hidden="true">✓</span>
+                      <span>پایش هفتگی وزن و سایز دور شکم توسط کارشناس</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-success-text font-bold" aria-hidden="true">✓</span>
+                      <span>قابلیت فریز اشتراک تا ۴۸ ساعت قبل و برگشت به کیف پول</span>
+                    </li>
+                  </ul>
                 </div>
 
-                {/* Pricing & Activation Action */}
-                <div className="pt-6 border-t border-border-default flex flex-col gap-3">
-                  <div className="flex items-baseline justify-between">
+                {/* Pricing & CTA */}
+                <div className="pt-5 border-t border-border-default">
+                  <div className="flex items-baseline justify-between mb-4">
                     <div>
-                      <span className="text-xs text-muted block">تعرفه دوره:</span>
+                      <span className="text-xs text-text-subtle block">سرمایه‌گذاری دوره</span>
                       {currentTier?.dailyDisplayPrice && (
-                        <span className="text-[11px] text-primary font-bold">
-                          معادل روزانه {formatToman(currentTier.dailyDisplayPrice)}
+                        <span className="text-xs text-primary-text font-medium tabular-nums">
+                          روزانه {formatToman(currentTier.dailyDisplayPrice)}
                         </span>
                       )}
                     </div>
-                    <span className="text-2xl font-black text-strong font-sans">
-                      {currentTier ? formatToman(currentTier.basePriceToman) : "-"}
+                    <span className="text-2xl font-black text-text-strong tabular-nums">
+                      {currentTier ? formatToman(currentTier.basePriceToman) : "—"}
                     </span>
                   </div>
 
                   <Link
                     href={`/start?program=${prog.slug}&tier=${currentTier?.tierType || "FULL_BOARD"}`}
-                    className="w-full"
+                    className="block w-full mb-2"
                   >
                     <Button
                       variant={isFeatured ? "primary" : "secondary"}
-                      size="lg"
-                      className="w-full shadow-elevation-1 hover:shadow-elevation-2 transition-all font-bold rounded-pill"
+                      size="md"
+                      className="w-full"
                     >
-                      انتخاب این برنامه و سفارشی‌سازی ←
+                      شروع این برنامه ←
                     </Button>
                   </Link>
 
-                  <Link href={`/programs/${prog.slug}`} className="w-full">
-                    <Button variant="ghost" size="sm" className="w-full text-muted hover:text-primary">
-                      مشاهده جزئیات علمی و گزینه‌های منو
+                  <Link href={`/programs/${prog.slug}`} className="block w-full">
+                    <Button variant="ghost" size="sm" className="w-full text-text-muted">
+                      بررسی جزئیات برنامه
                     </Button>
                   </Link>
                 </div>
-              </Card>
+              </article>
             );
           })}
         </div>
