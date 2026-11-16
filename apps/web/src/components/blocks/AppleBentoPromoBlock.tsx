@@ -158,12 +158,15 @@ export function AppleBentoPromoBlock({ content, cards = DEFAULT_CARDS }: AppleBe
                 {/* Bottom Center Visual Presentation */}
                 <div className="relative mt-auto pt-4 flex flex-col items-center justify-center">
                   <div className="w-full h-44 sm:h-52 rounded-2xl bg-canvas border border-border-subtle/80 flex items-center justify-center relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-medium">
+                    {/* Ambient studio glow */}
+                    <div className="absolute inset-x-8 bottom-4 h-12 bg-surface/70 rounded-full blur-md opacity-80" />
+
                     {glyph ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={glyph.path}
                         alt={glyph.faTitle}
-                        className="w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-sm transition-transform duration-medium group-hover:scale-105"
+                        className="w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-sm transition-transform duration-medium group-hover:scale-105 relative z-10"
                       />
                     ) : (
                       <div className="w-24 h-24 rounded-full bg-calm text-primary flex items-center justify-center font-bold text-sm">
@@ -171,13 +174,27 @@ export function AppleBentoPromoBlock({ content, cards = DEFAULT_CARDS }: AppleBe
                       </div>
                     )}
 
+                    {/* Dynamic Floating Pill for specific cards */}
+                    {card.id === "cafe-boutique" && (
+                      <div className="absolute top-3 start-3 px-3 py-1 bg-surface/95 backdrop-blur-md rounded-pill border border-border-subtle text-[11px] font-bold text-primary flex items-center gap-1.5 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                        <span>قهوه تخصصی و سالادبار</span>
+                      </div>
+                    )}
+
+                    {card.id === "bmr-tool" && (
+                      <div className="absolute top-3 start-3 px-3 py-1 bg-surface/95 backdrop-blur-md rounded-pill border border-border-subtle text-[11px] font-bold text-accent flex items-center gap-1.5 shadow-xs">
+                        <span>فرمول Mifflin-St Jeor</span>
+                      </div>
+                    )}
+
                     {/* Micro Stats Bar Overlay */}
                     {card.stats && card.stats.length > 0 && (
-                      <div className="absolute bottom-3 inset-x-3 bg-surface/90 backdrop-blur-md rounded-xl p-2.5 border border-border-subtle flex items-center justify-around text-center">
+                      <div className="absolute bottom-3 inset-x-3 bg-surface/90 backdrop-blur-md rounded-xl p-2.5 border border-border-subtle flex items-center justify-around text-center z-10">
                         {card.stats.map((stat, i) => (
                           <div key={i} className="flex flex-col">
                             <span className="text-[10px] text-muted">{stat.label}</span>
-                            <span className="text-xs font-bold text-strong">{stat.value}</span>
+                            <span className="text-xs font-bold text-strong font-sans">{stat.value}</span>
                           </div>
                         ))}
                       </div>

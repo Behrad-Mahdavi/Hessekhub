@@ -24,41 +24,56 @@ export async function apiFetch<T>(endpoint: string, options?: RequestInit): Prom
 
 // Server Component direct data loaders (Zero-latency ISR with Prisma)
 export async function getCmsPage(slug: string) {
-  return prisma.cmsPage.findUnique({
-    where: { slug },
-    include: {
-      seoMeta: true,
-      sections: {
-        where: { isVisible: true },
-        orderBy: { orderIndex: "asc" },
+  try {
+    return await prisma.cmsPage.findUnique({
+      where: { slug },
+      include: {
+        seoMeta: true,
+        sections: {
+          where: { isVisible: true },
+          orderBy: { orderIndex: "asc" },
+        },
+        faqs: {
+          orderBy: { orderIndex: "asc" },
+        },
       },
-      faqs: {
-        orderBy: { orderIndex: "asc" },
-      },
-    },
-  });
+    });
+  } catch (err) {
+    console.warn(`[getCmsPage] Warning: failed to load page "${slug}" from db:`, err);
+    return null;
+  }
 }
 
 export async function getPrograms() {
-  return prisma.programTemplate.findMany({
-    where: { isActive: true },
-    include: {
-      coverageTiers: { where: { isActive: true }, orderBy: { basePriceToman: "desc" } },
-      seoMeta: true,
-    },
-    orderBy: { sortOrder: "asc" },
-  });
+  try {
+    return await prisma.programTemplate.findMany({
+      where: { isActive: true },
+      include: {
+        coverageTiers: { where: { isActive: true }, orderBy: { basePriceToman: "desc" } },
+        seoMeta: true,
+      },
+      orderBy: { sortOrder: "asc" },
+    });
+  } catch (err) {
+    console.warn("[getPrograms] Warning: failed to load programs from db:", err);
+    return [];
+  }
 }
 
 export async function getProgramBySlug(slug: string) {
-  return prisma.programTemplate.findUnique({
-    where: { slug },
-    include: {
-      phases: { orderBy: { orderIndex: "asc" } },
-      coverageTiers: { where: { isActive: true }, orderBy: { basePriceToman: "desc" } },
-      seoMeta: true,
-    },
-  });
+  try {
+    return await prisma.programTemplate.findUnique({
+      where: { slug },
+      include: {
+        phases: { orderBy: { orderIndex: "asc" } },
+        coverageTiers: { where: { isActive: true }, orderBy: { basePriceToman: "desc" } },
+        seoMeta: true,
+      },
+    });
+  } catch (err) {
+    console.warn(`[getProgramBySlug] Warning: failed to load program "${slug}" from db:`, err);
+    return null;
+  }
 }
 
 export async function getCafeMenuItems() {
