@@ -24,7 +24,7 @@ export function Header() {
       <div className="w-full bg-calm/70 border-b border-border-subtle/80 py-1.5 px-4 text-center text-[11px] font-medium text-muted flex items-center justify-center gap-3">
         <span className="flex items-center gap-1.5 text-primary font-bold">
           <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-          کافه‌بوتیک سجاد باز است (۸:۰۰ تا ۲۴:۰۰)
+          کافه‌بوتیک باز است (۸:۰۰ تا ۲۴:۰۰)
         </span>
         <span className="hidden sm:inline text-border-default">•</span>
         <span className="hidden sm:inline">تحویل اختصاصی روزانه در تمام مناطق مشهد با نظارت کارشناس تغذیه</span>
@@ -32,7 +32,7 @@ export function Header() {
 
       <header className="sticky top-0 z-sticky w-full bg-surface/85 backdrop-blur-xl border-b border-border-default/70 shadow-[0_8px_30px_rgba(16,15,13,0.04)] transition-all">
         <div className="max-w-container mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
-          {/* Brand Logo & Location Tag */}
+          {/* Brand Logo */}
           <div className="flex items-center gap-4">
             <Link
               href="/"
@@ -46,12 +46,6 @@ export function Header() {
                 className="h-10 w-auto object-contain"
               />
             </Link>
-
-            {/* Sajjad Mashhad Location Pill (Desktop) */}
-            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-calm text-primary text-xs font-semibold rounded-pill border border-border-subtle shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-primary/70" aria-hidden="true" />
-              <span>مشهد، بلوار سجاد · از ۱۳۹۷</span>
-            </div>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -136,7 +130,7 @@ export function Header() {
         <div className="md:hidden border-b border-border-default bg-surface px-6 py-6 flex flex-col gap-4 text-start animate-in slide-in-from-top duration-fast shadow-elevation-2">
           <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
             <span className="text-xs font-medium text-muted">کافه‌بوتیک و کترینگ سلامت حس خوب</span>
-            <span className="text-xs font-bold text-primary">مشهد، بلوار سجاد</span>
+            <span className="text-xs font-bold text-primary">مشهد، بلوار هاشمیه</span>
           </div>
 
           {NAV_LINKS.map((item) => {
@@ -165,7 +159,7 @@ export function Header() {
               href="tel:05137660000"
               className="inline-flex items-center justify-center gap-2 h-control bg-calm text-primary text-sm font-bold rounded-pill border border-border-subtle"
             >
-              <span>تماس با شعبه سجاد: ۰۵۱-۳۷۶۶۰۰۰۰</span>
+              <span>تماس با کافه‌بوتیک: ۰۵۱-۳۷۶۶۰۰۰۰</span>
             </a>
           </div>
         </div>

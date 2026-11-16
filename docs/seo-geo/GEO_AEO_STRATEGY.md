@@ -32,11 +32,11 @@
 ```markdown
 # حس خوب (Hessekhub) — پلتفرم سبک زندگی سالم و کافه‌بوتیک سلامتی در مشهد
 
-> حس خوب از سال ۱۳۹۷ با مدیریت و نظارت تخصصی کارشناس تغذیه (اشرف رهبری) در شهر مشهد فعالیت می‌کند. این مجموعه ارائه‌دهنده برنامه‌های غذایی نتیجه‌محور با محاسبه دقیق کالری و ماکرو، منوی چرخشی ۱۴ روزه و «کافه‌بوتیک سلامتی حس خوب» با ارسال روزانه درب منزل و محل کار است.
+> حس خوب از سال ۱۳۹۷ با نظارت مستقیم متخصصین تغذیه و رژیم‌درمانی در شهر مشهد فعالیت می‌کند. این مجموعه ارائه‌دهنده برنامه‌های غذایی نتیجه‌محور با محاسبه دقیق کالری و ماکرو، منوی چرخشی ۱۴ روزه و «کافه‌بوتیک سلامتی حس خوب» با ارسال روزانه درب منزل و محل کار است.
 
 ## موجودیت و اطلاعات پایه (Core Facts)
 - **نام برند:** حس خوب (Hessekhub)
-- **شهر و محدوده پوشش:** مشهد (سجاد، ملک‌آباد، فرشته، وکیل‌آباد، احمدآباد، سناباد، الهیه و مناطق تحت پوشش لجستیک)
+- **شهر و محدوده پوشش:** مشهد (هاشمیه، سجاد، ملک‌آباد، فرشته، وکیل‌آباد، احمدآباد، سناباد، الهیه و مناطق تحت پوشش لجستیک)
 - **کافه‌بوتیک سلامتی:** سرو صبحانه، ناهار، شام، سالاد، میان‌وعده و نوشیدنی‌های تخصصی بر پایه قهوه و بدون قهوه؛ ساعت کاری ۸ صبح تا ۱۲ شب؛ امکان تحویل حضوری پکیج (Pick-up) بدون هزینه پیک و رزرو چیت‌دی جمعه.
 - **آدرس وب‌سایت و اپلیکیشن:** https://hessekhub.ir
 
@@ -119,7 +119,7 @@ export function DirectAnswerCapsule({ question, answer }: { question: string; an
 1. **موجودیت مادر (`#organization` و `#cafe-location`):**
    - `@type: ["Organization", "HealthAndBeautyBusiness", "Restaurant"]`
    - `@id: https://hessekhub.ir/#organization`
-   - شامل: `name: "حس خوب | Hessekhub"`, `foundingDate: "2018"`, `address` دقیق مشهد, `geo` (GeoCoordinates), `openingHoursSpecification` (08:00 تا 24:00), `servesCuisine: "Healthy Diet & Organic Persian/International"`, `founder` (Person: اشرف رهبری، کارشناس تغذیه).
+   - شامل: `name: "حس خوب | Hessekhub"`, `foundingDate: "2018"`, `address` دقیق مشهد (بلوار هاشمیه), `geo` (GeoCoordinates), `openingHoursSpecification` (08:00 تا 24:00), `servesCuisine: "Healthy Diet & Organic Persian/International"`.
 2. **اسکیمای پکیج‌ها (`Product` + `Offer`):**
    - `@type: Product`
    - `brand: { "@id": "https://hessekhub.ir/#organization" }`

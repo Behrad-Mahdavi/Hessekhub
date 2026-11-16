@@ -149,7 +149,7 @@ export class CmsService {
           address: {
             "@type": "PostalAddress",
             addressLocality: "Mashhad",
-            streetAddress: branch?.addressFa || "بلوار سجاد، خیابان بهارستان، بهارستان ۲",
+            streetAddress: branch?.addressFa || "مشهد، بلوار هاشمیه",
             addressCountry: "IR",
           },
           geo: {

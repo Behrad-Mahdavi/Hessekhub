@@ -72,7 +72,7 @@ export default function CafeCheckoutPage() {
     }
 
     if (deliveryMethod === "DINE_IN_CAFE" && !tableNumber) {
-      setErrorMsg("لطفاً شماره میز خود در کافه‌بوتیک سجاد را وارد نمایید.");
+      setErrorMsg("لطفاً شماره میز خود در کافه‌بوتیک را وارد نمایید.");
       return;
     }
 
@@ -157,7 +157,7 @@ export default function CafeCheckoutPage() {
             تکمیل سفارش کافه‌بوتیک حس خوب
           </h1>
           <p className="text-sm text-muted">
-            شعبه مرکزی مشهد (سجاد، بهارستان ۲) — فعال از ۱۳۹۷
+            کافه‌بوتیک سلامت مشهد (بلوار هاشمیه) — فعال از ۱۳۹۷
           </p>
         </div>
 

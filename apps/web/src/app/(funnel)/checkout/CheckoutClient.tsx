@@ -219,7 +219,7 @@ export function CheckoutClient() {
                 تحویل حضوری
               </span>
               <span className="text-sm font-extrabold text-strong block">
-                کافه‌بوتیک سجاد (بدون هزینه)
+                کافه‌بوتیک (بدون هزینه)
               </span>
             </button>
           </div>
@@ -280,7 +280,7 @@ export function CheckoutClient() {
             </div>
           ) : (
             <div className="p-4 rounded-2xl bg-calm border border-border-default text-xs leading-relaxed text-muted">
-              بسته شما هر روز صبح از ساعت ۸:۰۰ در کافه‌بوتیک حس خوب (بلوار سجاد، بهارستان ۲) آماده تحویل با احترام خواهد بود.
+              بسته شما هر روز صبح از ساعت ۸:۰۰ در کافه‌بوتیک حس خوب (بلوار هاشمیه) آماده تحویل با احترام خواهد بود.
             </div>
           )}
         </Card>

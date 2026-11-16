@@ -177,7 +177,7 @@ export function PackageComparisonBlock({
                       <span className="w-4 h-4 rounded-full bg-success-subtle text-success flex items-center justify-center shrink-0 text-[11px] font-bold">
                         ✓
                       </span>
-                      <span>پایش هفتگی بیومتریک و نظارت کارشناس تغذیه (اشرف رهبری)</span>
+                      <span>پایش هفتگی بیومتریک و نظارت مستقیم متخصص تغذیه</span>
                     </div>
                     <div className="flex items-center gap-2.5">
                       <span className="w-4 h-4 rounded-full bg-success-subtle text-success flex items-center justify-center shrink-0 text-[11px] font-bold">

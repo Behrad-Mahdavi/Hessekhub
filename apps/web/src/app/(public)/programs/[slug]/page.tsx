@@ -115,8 +115,9 @@ export default async function ProgramDetailPage({ params }: PageProps) {
 
           {/* Monumental Product Hero (Apple Style) */}
           <section id="overview" className="text-center max-w-4xl mx-auto mb-16 pt-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-pill bg-surface border border-border-subtle text-xs text-primary font-bold mb-4">
-              <span>نظارت اشرف رهبری (نظام پزشکی ت-۵۶۲۸)</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-pill bg-surface border border-border-subtle text-xs text-primary font-bold mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-success" />
+              <span>تحت نظارت مستقیم متخصص تغذیه</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-strong mb-6 leading-tight tracking-normal">
@@ -283,19 +284,19 @@ export default async function ProgramDetailPage({ params }: PageProps) {
 
           {/* Clinical Supervision Seal */}
           <section id="supervision" className="rounded-3xl bg-surface border border-border-subtle p-8 sm:p-12 text-start max-w-3xl mx-auto shadow-xs">
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <div className="w-16 h-16 rounded-full bg-calm text-primary font-bold text-xl flex items-center justify-center shrink-0">
-                AR
+            <div className="flex flex-col sm:flex-row items-center gap-5">
+              <div className="w-12 h-12 rounded-2xl bg-calm text-primary font-bold text-lg flex items-center justify-center shrink-0">
+                🌿
               </div>
               <div>
                 <h3 className="text-lg font-bold text-strong mb-1">
-                  نظارت مستقیم کارشناس ارشد تغذیه: اشرف رهبری
+                  نظارت مستقیم متخصص تغذیه و رژیم‌درمانی
                 </h3>
-                <p className="text-xs text-muted leading-relaxed mb-3">
-                  عضو رسمی سازمان نظام پزشکی جمهوری اسلامی ایران (کد: ت-۵۶۲۸). تمامی سرفصل‌های کالری‌سنجی و برنامه‌ریزی منوی این پکیج بر مبنای آخرین گایدلاین‌های بالینی انجمن تغذیه بالینی اروپا (ESPEN) تنظیم شده است.
+                <p className="text-xs text-muted leading-relaxed mb-2">
+                  تمامی سرفصل‌های کالری‌سنجی و برنامه‌ریزی منوی این پکیج بر مبنای آخرین راهنماهای بالینی انجمن تغذیه بالینی اروپا (ESPEN) و با کنترل گرمی درشت‌مغذی‌ها تنظیم شده است.
                 </p>
                 <span className="text-xs font-bold text-primary">
-                  پایش هفتگی مشترک با چک‌این آنلاین و پشتیبانی مستقیم در مشهد
+                  پایش مستمر مشترک با چک‌این آنلاین و پشتیبانی تغذیه در مشهد
                 </span>
               </div>
             </div>

@@ -32,16 +32,6 @@ export function HeroLeafBlock({ content }: HeroLeafBlockProps) {
       />
 
       <div className="max-w-container mx-auto px-4 md:px-8 relative z-10 flex flex-col items-center">
-        {/* Apple-Style Micro Announcement Tag */}
-        <div className="mb-6 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-surface/90 border border-border-subtle shadow-xs backdrop-blur-md">
-          <span className="w-2 h-2 rounded-full bg-success animate-pulse" aria-hidden="true" />
-          <span className="text-xs font-medium text-strong">
-            {content.badgeFa || "پلتفرم تخصصی سبک زندگی سالم و کافه‌بوتیک سجاد مشهد · از ۱۳۹۷"}
-          </span>
-          <span className="text-border-default">•</span>
-          <span className="text-xs text-primary font-bold">نظارت اشرف رهبری</span>
-        </div>
-
         {/* Monumental Persian Display Headline */}
         <h1 className="max-w-4xl text-3xl sm:text-5xl lg:text-6xl font-black text-strong leading-[1.25] sm:leading-[1.2] lg:leading-[1.15] tracking-normal mb-6">
           {content.headlineFa || "حس خوب زندگی سالم، در هر وعده غذای شما."}
@@ -161,14 +151,9 @@ export function HeroLeafBlock({ content }: HeroLeafBlockProps) {
                 </div>
 
                 {/* Clinical Guarantee Footer */}
-                <div className="pt-4 border-t border-border-subtle flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-calm text-primary flex items-center justify-center font-bold text-xs shrink-0">
-                    AR
-                  </div>
-                  <div className="text-[11px] text-muted leading-tight">
-                    <span className="font-bold text-strong block">تأییدیه بالینی اشرف رهبری</span>
-                    <span>شماره نظام پزشکی: ت-۵۶۲۸ · مشهد</span>
-                  </div>
+                <div className="pt-4 border-t border-border-subtle flex items-center gap-2 text-xs text-muted">
+                  <span className="w-2 h-2 rounded-full bg-success" aria-hidden="true" />
+                  <span className="font-medium text-strong">طبخ روزانه تحت نظارت مستقیم متخصص تغذیه</span>
                 </div>
               </div>
 

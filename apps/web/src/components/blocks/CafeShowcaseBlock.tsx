@@ -33,7 +33,7 @@ export function CafeShowcaseBlock({ content }: CafeShowcaseBlockProps) {
             <div className="lg:col-span-7 text-start">
               <div className="flex flex-wrap items-center gap-2.5 mb-6">
                 <Badge variant="luxe" size="md">
-                  کافه‌بوتیک سلامت سجاد مشهد · تاسیس ۱۳۹۷
+                  کافه‌بوتیک سلامت حس خوب · تاسیس ۱۳۹۷
                 </Badge>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-calm text-primary text-xs font-bold rounded-pill border border-border-subtle shadow-sm">
                   <span className="w-2 h-2 rounded-full bg-success animate-pulse" />

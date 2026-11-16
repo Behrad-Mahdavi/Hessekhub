@@ -49,7 +49,7 @@ export function DynamicBlockRenderer({
             descriptionFa:
               "نخستین کافه‌بوتیک سلامت در مشهد با منوی تخصصی بدون شکر افزوده، قهوه تخصصی و سالادبارهای غنی‌شده.",
             openHoursFa: "همه‌روزه ۸:۰۰ تا ۲۴:۰۰",
-            locationAddressFa: "مشهد، بلوار سجاد، خیابان بهارستان، بهارستان ۲",
+            locationAddressFa: "مشهد، بلوار هاشمیه",
             ctaTextFa: "مشاهده منوی کافه‌بوتیک",
             ctaUrl: "/cafe/menu",
           }}

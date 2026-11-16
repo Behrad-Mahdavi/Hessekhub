@@ -9,16 +9,16 @@ import { DirectAnswerCapsule } from "@/components/seo/DirectAnswerCapsule";
 import { JsonLdGraph } from "@/components/seo/JsonLdGraph";
 
 export const metadata: Metadata = {
-  title: "کافه‌بوتیک سلامت حس خوب مشهد (سجاد) | قهوه تخصصی و منوی پروتئینی",
+  title: "کافه‌بوتیک سلامت حس خوب مشهد (هاشمیه) | قهوه تخصصی و منوی پروتئینی",
   description:
-    "کافه‌بوتیک سلامت حس خوب در بلوار سجاد مشهد (فعال از ۱۳۹۷). قهوه تخصصی، برانچ و سالادهای سلامت، ناهار پروتئینی و تحویل حضوری پکیج‌های رژیمی مشترکین.",
+    "کافه‌بوتیک سلامت حس خوب در بلوار هاشمیه مشهد (فعال از ۱۳۹۷). قهوه تخصصی، برانچ و سالادهای سلامت، ناهار پروتئینی و تحویل حضوری پکیج‌های رژیمی مشترکین.",
   alternates: {
     canonical: "https://hessekhub.ir/cafe",
   },
 };
 
 const CAFE_CHAPTERS = [
-  { href: "/cafe", label: "کافه‌بوتیک سجاد", badge: "شعبه مرکزی" },
+  { href: "/cafe", label: "کافه‌بوتیک سلامت", badge: "شعبه مرکزی" },
   { href: "/cafe/menu", label: "منوی آنلاین و سفارش" },
   { href: "/programs", label: "پکیج‌های رژیمی" },
   { href: "/cafe/checkout", label: "سبد سفارش" },
@@ -30,11 +30,11 @@ export default function CafeLandingPage() {
   const cafeSchema = {
     "@type": "CafeOrCoffeeShop",
     "@id": "https://hessekhub.ir/cafe#place",
-    name: "کافه‌بوتیک سلامت حس خوب (سجاد مشهد)",
+    name: "کافه‌بوتیک سلامت حس خوب (هاشمیه مشهد)",
     telephone: "05137660000",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "مشهد، بلوار سجاد، خیابان بهارستان، بهارستان ۲",
+      streetAddress: "مشهد، بلوار هاشمیه",
       addressLocality: "Mashhad",
       addressCountry: "IR",
     },
@@ -61,7 +61,7 @@ export default function CafeLandingPage() {
           {/* Direct Answer Capsule (AEO) */}
           <DirectAnswerCapsule
             question="کافه‌بوتیک سلامت حس خوب مشهد کجاست و چه امکاناتی دارد؟"
-            answer="کافه‌بوتیک حس خوب در بلوار سجاد (بهارستان ۲) مشهد واقع شده و همه‌روزه از ۸ صبح تا ۲۴ بامداد دایر است. این کافه فضایی اختصاصی برای نوشیدنی‌های سلامت، برانچ پروتئینی، سالادهای ارگانیک و ایستگاه تحویل حضوری پکیج‌های رژیمی مشترکین بدون هزینه پیک می‌باشد."
+            answer="کافه‌بوتیک حس خوب در بلوار هاشمیه مشهد واقع شده و همه‌روزه از ۸ صبح تا ۲۴ بامداد دایر است. این کافه فضایی اختصاصی برای نوشیدنی‌های سلامت، برانچ پروتئینی، سالادهای ارگانیک و ایستگاه تحویل حضوری پکیج‌های رژیمی مشترکین بدون هزینه پیک می‌باشد."
           />
 
           {/* Monumental Hero (Apple Retail Style) */}
@@ -69,7 +69,7 @@ export default function CafeLandingPage() {
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-surface border border-border-subtle shadow-xs mb-4">
               <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               <span className="text-xs font-medium text-strong">
-                شعبه حضوری بلوار سجاد مشهد · از سال ۱۳۹۷
+                شعبه حضوری بلوار هاشمیه مشهد · از سال ۱۳۹۷
               </span>
             </div>
 
@@ -78,7 +78,7 @@ export default function CafeLandingPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-muted leading-relaxed max-w-2xl mx-auto mb-10">
-              فضایی دنج و فاخر در قلب بلوار سجاد مشهد برای آنان که به سلامت خود احترام می‌گذارند. منوی برانچ پروتئینی، قهوه تخصصی و نوشیدنی‌های بدون شکر افزوده.
+              فضایی دنج و فاخر در بلوار هاشمیه مشهد برای آنان که به سلامت خود احترام می‌گذارند. منوی برانچ پروتئینی، قهوه تخصصی و نوشیدنی‌های بدون شکر افزوده.
             </p>
 
             {/* Dual Action Pills */}
@@ -116,7 +116,7 @@ export default function CafeLandingPage() {
                     </div>
                     <div className="p-3 rounded-xl bg-canvas border border-border-subtle">
                       <span className="font-bold text-strong block mb-0.5">نشانی دقیق:</span>
-                      <span className="text-muted">سجاد، خیابان بهارستان ۲، پلاک ۱۸</span>
+                      <span className="text-muted">مشهد، بلوار هاشمیه</span>
                     </div>
                   </div>
                 </div>

@@ -98,7 +98,7 @@ export default async function ProgramsPage() {
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-[11px] font-bold text-accent uppercase">
-                        نظارت بالینی اشرف رهبری
+                        نظارت مستقیم متخصص تغذیه
                       </span>
                       {prog.slug === "weight-loss" && (
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-pill bg-primary/10 text-primary">

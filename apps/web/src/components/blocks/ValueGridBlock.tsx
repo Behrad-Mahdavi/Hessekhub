@@ -17,7 +17,7 @@ export interface ValueGridBlockProps {
   };
 }
 
-const PILL_TAGS = ["تنوع و عدم تکرار", "استاندارد ارگانیک", "پایش بیومتریک", "کافه‌بوتیک سجاد"];
+const PILL_TAGS = ["تنوع و عدم تکرار", "استاندارد ارگانیک", "پایش بیومتریک", "کافه‌بوتیک سلامت"];
 
 export function ValueGridBlock({ content }: ValueGridBlockProps) {
   const persianNumbers = ["۰۱", "۰۲", "۰۳", "۰۴"];

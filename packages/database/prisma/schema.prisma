@@ -152,7 +152,7 @@ model Branch {
   cityId       String
   city         City     @relation(fields: [cityId], references: [id])
   code         String   @unique // e.g., "MHD-SAJJAD-01"
-  nameFa       String   // "شعبه مرکزی و کافهبوتیک سجاد"
+  nameFa       String   // "شعبه مرکزی و کافهبوتیک هاشمیه"
   addressFa    String
   latitude     Float
   longitude    Float

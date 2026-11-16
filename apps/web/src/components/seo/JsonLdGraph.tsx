@@ -17,7 +17,7 @@ export function JsonLdGraph({ graph, customSchemas }: JsonLdGraphProps) {
     address: {
       "@type": "PostalAddress",
       addressLocality: "Mashhad",
-      streetAddress: "مشهد، بلوار سجاد، خیابان بهارستان، بهارستان ۲",
+      streetAddress: "مشهد، بلوار هاشمیه",
       addressCountry: "IR",
     },
     geo: {

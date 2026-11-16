@@ -59,17 +59,17 @@ const DEFAULT_CARDS: BentoCardData[] = [
   },
   {
     id: "cafe-boutique",
-    eyebrow: "شعبه حضوری بلوار سجاد",
+    eyebrow: "شعبه حضوری بلوار هاشمیه",
     title: "کافه‌بوتیک سلامت؛ آرامش در قلب مشهد.",
     description: "برانچ‌های پروتئینی، سالادبارهای غنی‌شده، قهوه تخصصی و ایستگاه تحویل حضوری پکیج‌های رژیمی بدون هزینه پیک.",
     primaryCtaLabel: "مشاهده منوی کافه",
     primaryCtaHref: "/cafe/menu",
-    secondaryCtaLabel: "درباره شعبه سجاد",
+    secondaryCtaLabel: "درباره کافه‌بوتیک",
     secondaryCtaHref: "/cafe",
     glyphId: "salad-bowl",
     stats: [
       { label: "ساعت کاری", value: "۸:۰۰ تا ۲۴:۰۰" },
-      { label: "موقعیت", value: "سجاد، بهارستان ۲" },
+      { label: "موقعیت", value: "مشهد، بلوار هاشمیه" },
     ],
   },
   {
